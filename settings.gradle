@@ -1,0 +1,6 @@
+rootProject.name = "peacetrue-dictionary"
+include("peacetrue-dictionary-service-api")
+include("peacetrue-dictionary-service-impl")
+include("peacetrue-dictionary-controller")
+include("peacetrue-dictionary-app")
+include("peacetrue-dictionary-client")

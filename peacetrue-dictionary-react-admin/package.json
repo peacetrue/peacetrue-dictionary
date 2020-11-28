@@ -1,0 +1,12 @@
+{
+  "name": "peacetrue-dictionary",
+  "version": "0.1.0",
+  "description": "字典",
+  "files": [
+    "src/modules"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peacetrue/peacetrue-dictionary.git"
+  }
+}
