@@ -15,7 +15,7 @@ services:
     #    build: peacetrue-dictionary
     image: peacetrueopenjdk:latest
     privileged: true
-#    restart: unless-stopped
+    #    restart: unless-stopped
     volumes:
       - ../peacetrue-dictionary-app/build/libs/peacetrue-dictionary-app-1.0.0-SNAPSHOT.jar:/app.jar
       - ./logs:/logs
