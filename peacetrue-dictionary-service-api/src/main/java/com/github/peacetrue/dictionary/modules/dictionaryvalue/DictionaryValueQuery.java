@@ -4,6 +4,8 @@ import com.github.peacetrue.core.OperatorCapableImpl;
 import com.github.peacetrue.core.Range;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+
 
 /**
  * @author xiayx
@@ -29,6 +31,8 @@ public class DictionaryValueQuery extends OperatorCapableImpl<Long> {
     private String code;
     /** 名称 */
     private String name;
+    /** 序号 */
+    private Integer serialNumber;
     /** 备注 */
     private String remark;
     /** 创建者主键 */

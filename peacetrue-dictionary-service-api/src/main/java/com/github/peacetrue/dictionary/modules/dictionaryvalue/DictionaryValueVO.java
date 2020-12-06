@@ -2,6 +2,7 @@ package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -23,6 +24,8 @@ public class DictionaryValueVO implements Serializable {
     private String code;
     /** 名称 */
     private String name;
+    /** 序号 */
+    private Integer serialNumber;
     /** 备注 */
     private String remark;
     /** 创建者主键 */

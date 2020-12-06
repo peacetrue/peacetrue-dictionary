@@ -33,6 +33,8 @@ public class DictionaryValue implements Serializable {
     private String name;
     /** 备注 */
     private String remark;
+    /** 序号 */
+    private Integer serialNumber;
     /** 创建者主键 */
     private Long creatorId;
     /** 创建时间 */

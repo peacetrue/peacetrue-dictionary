@@ -37,6 +37,9 @@ public class DictionaryValueModify extends OperatorCapableImpl<Long> {
     @NotNull
     @Size(min = 1, max = 255)
     private String name;
+    /** 序号 */
+    @NotNull
+    private Integer serialNumber;
     /** 备注 */
     @NotNull
     @Size(min = 1, max = 255)

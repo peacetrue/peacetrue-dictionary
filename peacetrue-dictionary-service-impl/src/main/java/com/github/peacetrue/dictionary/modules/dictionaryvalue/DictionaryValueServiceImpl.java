@@ -1,6 +1,7 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
 import com.github.peacetrue.core.Range;
+import com.github.peacetrue.dictionary.modules.dictionarytype.DictionaryTypeService;
 import com.github.peacetrue.spring.data.relational.core.query.CriteriaUtils;
 import com.github.peacetrue.spring.data.relational.core.query.UpdateUtils;
 import com.github.peacetrue.spring.util.BeanUtils;
@@ -36,6 +37,8 @@ import java.util.Collections;
 public class DictionaryValueServiceImpl implements DictionaryValueService {
 
     @Autowired
+    private DictionaryTypeService dictionaryTypeService;
+    @Autowired
     private R2dbcEntityTemplate entityTemplate;
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -60,12 +63,19 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
     @Transactional
     public Mono<DictionaryValueVO> add(DictionaryValueAdd params) {
         log.info("新增字典项值信息[{}]", params);
+        if (params.getRemark() == null) params.setRemark("");
         DictionaryValue entity = BeanUtils.map(params, DictionaryValue.class);
+        entity.setDictionaryTypeCode("");
         entity.setCreatorId(params.getOperatorId());
         entity.setCreatedTime(LocalDateTime.now());
         entity.setModifierId(entity.getCreatorId());
         entity.setModifiedTime(entity.getCreatedTime());
-        return entityTemplate.insert(entity)
+        Query dictionaryTypeIdQuery = Query.query(Criteria.where("dictionaryTypeId")
+                .is(params.getDictionaryTypeId()));
+        return entityTemplate.count(dictionaryTypeIdQuery, DictionaryValue.class)
+                .switchIfEmpty(Mono.just(0L))
+                .doOnNext(count -> entity.setSerialNumber(count.intValue() + 1))
+                .flatMap(count -> entityTemplate.insert(entity))
                 .map(item -> BeanUtils.map(item, DictionaryValueVO.class))
                 .doOnNext(item -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(item, params)));
     }

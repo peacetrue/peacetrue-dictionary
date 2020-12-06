@@ -43,9 +43,8 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
     public static Criteria buildCriteria(DictionaryTypeQuery params) {
         return CriteriaUtils.and(
                 CriteriaUtils.nullableCriteria(CriteriaUtils.smartIn("id"), params::getId),
-                CriteriaUtils.nullableCriteria(Criteria.where("code")::like, value -> "%" + value + "%", params::getCode),
+                CriteriaUtils.nullableCriteria(Criteria.where("code")::is, params::getCode),
                 CriteriaUtils.nullableCriteria(Criteria.where("name")::like, value -> "%" + value + "%", params::getName),
-                CriteriaUtils.nullableCriteria(Criteria.where("remark")::like, value -> "%" + value + "%", params::getRemark),
                 CriteriaUtils.nullableCriteria(Criteria.where("creatorId")::is, params::getCreatorId),
                 CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::greaterThanOrEquals, params.getCreatedTime()::getLowerBound),
                 CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::lessThan, DateUtils.DATE_CELL_EXCLUDE, params.getCreatedTime()::getUpperBound),
@@ -60,6 +59,7 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
     public Mono<DictionaryTypeVO> add(DictionaryTypeAdd params) {
         log.info("新增字典类型信息[{}]", params);
         DictionaryType entity = BeanUtils.map(params, DictionaryType.class);
+        if (entity.getRemark() == null) entity.setRemark("");
         entity.setCreatorId(params.getOperatorId());
         entity.setCreatedTime(LocalDateTime.now());
         entity.setModifierId(entity.getCreatorId());

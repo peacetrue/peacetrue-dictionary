@@ -25,6 +25,7 @@ create table dictionary_value
     dictionary_type_code varchar(32)  not null comment '字典类型. 冗余编码方便查询',
     code                 varchar(32)  not null comment '编码',
     name                 varchar(255) not null comment '名称',
+    serial_number        smallint     not null comment '序号',
     remark               varchar(255) not null comment '备注',
     creator_id           bigint       not null comment '创建者主键',
     created_time         datetime     not null comment '创建时间',
