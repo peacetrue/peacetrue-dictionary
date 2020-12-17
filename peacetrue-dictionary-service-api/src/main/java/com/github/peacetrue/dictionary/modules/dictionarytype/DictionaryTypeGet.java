@@ -1,9 +1,8 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
 import com.github.peacetrue.core.OperatorCapableImpl;
+import com.github.peacetrue.validation.constraints.multinotnull.MultiNotNull;
 import lombok.*;
-
-import javax.validation.constraints.NotNull;
 
 
 /**
@@ -14,11 +13,19 @@ import javax.validation.constraints.NotNull;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@MultiNotNull(propertyNames = {"id", "code"})
 public class DictionaryTypeGet extends OperatorCapableImpl<Long> {
 
     private static final long serialVersionUID = 0L;
 
-    @NotNull
     private Long id;
+    private String code;
 
+    public DictionaryTypeGet(Long id) {
+        this.id = id;
+    }
+
+    public DictionaryTypeGet(String code) {
+        this.code = code;
+    }
 }

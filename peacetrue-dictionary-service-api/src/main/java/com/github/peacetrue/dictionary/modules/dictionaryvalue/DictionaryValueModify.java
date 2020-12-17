@@ -23,25 +23,19 @@ public class DictionaryValueModify extends OperatorCapableImpl<Long> {
     @NotNull
     private Long id;
     /** 字典类型. 主键 */
-    @NotNull
     private Long dictionaryTypeId;
     /** 字典类型. 冗余编码方便查询 */
-    @NotNull
     @Size(min = 1, max = 32)
     private String dictionaryTypeCode;
     /** 编码 */
-    @NotNull
     @Size(min = 1, max = 32)
     private String code;
     /** 名称 */
-    @NotNull
     @Size(min = 1, max = 255)
     private String name;
     /** 序号 */
-    @NotNull
     private Integer serialNumber;
     /** 备注 */
-    @NotNull
     @Size(min = 1, max = 255)
     private String remark;
 

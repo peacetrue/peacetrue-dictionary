@@ -71,9 +71,8 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<Page<DictionaryTypeVO>> query(@Nullable DictionaryTypeQuery params, @Nullable Pageable pageable, String... projection) {
+    public Mono<Page<DictionaryTypeVO>> query(DictionaryTypeQuery params, @Nullable Pageable pageable, String... projection) {
         log.info("分页查询字典类型信息[{}]", params);
-        if (params == null) params = DictionaryTypeQuery.DEFAULT;
         if (params.getCreatedTime() == null) params.setCreatedTime(Range.LocalDateTime.DEFAULT);
         if (params.getModifiedTime() == null) params.setModifiedTime(Range.LocalDateTime.DEFAULT);
         Pageable finalPageable = pageable == null ? PageRequest.of(0, 10) : pageable;
@@ -88,33 +87,37 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
                             .reduce(new ArrayList<>(), StreamUtils.reduceToCollection())
                             .map(item -> new PageImpl<>(item, finalPageable, total));
                 })
+                .doOnNext(item -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(item, params)))
                 .switchIfEmpty(Mono.just(new PageImpl<>(Collections.emptyList(), finalPageable, 0L)));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Flux<DictionaryTypeVO> query(@Nullable DictionaryTypeQuery params, @Nullable Sort sort, String... projection) {
+    public Flux<DictionaryTypeVO> query(DictionaryTypeQuery params, @Nullable Sort sort, String... projection) {
         log.info("全量查询字典类型信息[{}]", params);
-        if (params == null) params = DictionaryTypeQuery.DEFAULT;
         if (params.getCreatedTime() == null) params.setCreatedTime(Range.LocalDateTime.DEFAULT);
         if (params.getModifiedTime() == null) params.setModifiedTime(Range.LocalDateTime.DEFAULT);
         if (sort == null) sort = Sort.by("createdTime").descending();
         Criteria where = buildCriteria(params);
         Query query = Query.query(where).sort(sort).limit(100);
         return entityTemplate.select(query, DictionaryType.class)
-                .map(item -> BeanUtils.map(item, DictionaryTypeVO.class));
+                .map(item -> BeanUtils.map(item, DictionaryTypeVO.class))
+                .doOnNext(item -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(item, params)))
+                ;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Mono<DictionaryTypeVO> get(DictionaryTypeGet params, String... projection) {
         log.info("获取字典类型信息[{}]", params);
-//        Criteria where = CriteriaUtils.and(
-//                CriteriaUtils.nullableCriteria(Criteria.where("id")::is, params::getId),
-//        );
-        Criteria where = Criteria.where("id").is(params.getId());
+        Criteria where = CriteriaUtils.and(
+                CriteriaUtils.nullableCriteria(Criteria.where("id")::is, params::getId),
+                CriteriaUtils.nullableCriteria(Criteria.where("code")::is, params::getCode)
+        );
         return entityTemplate.selectOne(Query.query(where), DictionaryType.class)
-                .map(item -> BeanUtils.map(item, DictionaryTypeVO.class));
+                .map(item -> BeanUtils.map(item, DictionaryTypeVO.class))
+                .doOnNext(item -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(item, params)))
+                ;
     }
 
     @Override

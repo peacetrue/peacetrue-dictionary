@@ -33,8 +33,6 @@ public class DictionaryValueQuery extends OperatorCapableImpl<Long> {
     private String name;
     /** 序号 */
     private Integer serialNumber;
-    /** 备注 */
-    private String remark;
     /** 创建者主键 */
     private Long creatorId;
     /** 创建时间 */
@@ -46,6 +44,10 @@ public class DictionaryValueQuery extends OperatorCapableImpl<Long> {
 
     public DictionaryValueQuery(Long[] id) {
         this.id = id;
+    }
+
+    public DictionaryValueQuery(String dictionaryTypeCode) {
+        this.dictionaryTypeCode = dictionaryTypeCode;
     }
 
 }

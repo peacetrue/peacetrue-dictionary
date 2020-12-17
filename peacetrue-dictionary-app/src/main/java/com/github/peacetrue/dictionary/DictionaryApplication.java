@@ -1,11 +1,9 @@
 package com.github.peacetrue.dictionary;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.peacetrue.spring.formatter.date.AutomaticDateFormatter;
 import com.github.peacetrue.spring.formatter.date.AutomaticLocalDateFormatter;
 import com.github.peacetrue.spring.formatter.date.AutomaticLocalDateTimeFormatter;
 import com.github.peacetrue.spring.formatter.date.AutomaticTimeFormatter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,9 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.ReactivePageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.http.codec.ServerCodecConfigurer;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -40,15 +35,6 @@ public class DictionaryApplication {
     @Configuration
     @EnableWebFlux
     public static class WebConfig implements WebFluxConfigurer {
-
-        @Autowired
-        private ObjectMapper objectMapper;
-
-        @Override
-        public void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
-            configurer.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper));
-            configurer.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper));
-        }
 
         @Override
         public void addCorsMappings(CorsRegistry registry) {

@@ -1,5 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
+import com.github.peacetrue.core.IdCapable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class DictionaryValue implements Serializable {
+public class DictionaryValue implements Serializable, IdCapable<Long> {
 
     private static final long serialVersionUID = 0L;
 

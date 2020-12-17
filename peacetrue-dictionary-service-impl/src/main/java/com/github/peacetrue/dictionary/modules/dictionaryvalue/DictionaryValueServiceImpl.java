@@ -1,7 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
 import com.github.peacetrue.core.Range;
-import com.github.peacetrue.dictionary.modules.dictionarytype.DictionaryTypeService;
 import com.github.peacetrue.spring.data.relational.core.query.CriteriaUtils;
 import com.github.peacetrue.spring.data.relational.core.query.UpdateUtils;
 import com.github.peacetrue.spring.util.BeanUtils;
@@ -12,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.data.domain.*;
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.data.r2dbc.core.R2dbcEntityOperations;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.data.relational.core.query.Update;
@@ -37,9 +36,7 @@ import java.util.Collections;
 public class DictionaryValueServiceImpl implements DictionaryValueService {
 
     @Autowired
-    private DictionaryTypeService dictionaryTypeService;
-    @Autowired
-    private R2dbcEntityTemplate entityTemplate;
+    private R2dbcEntityOperations entityOperations;
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
@@ -64,18 +61,23 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
     public Mono<DictionaryValueVO> add(DictionaryValueAdd params) {
         log.info("新增字典项值信息[{}]", params);
         if (params.getRemark() == null) params.setRemark("");
-        DictionaryValue entity = BeanUtils.map(params, DictionaryValue.class);
-        entity.setDictionaryTypeCode("");
-        entity.setCreatorId(params.getOperatorId());
-        entity.setCreatedTime(LocalDateTime.now());
-        entity.setModifierId(entity.getCreatorId());
-        entity.setModifiedTime(entity.getCreatedTime());
-        Query dictionaryTypeIdQuery = Query.query(Criteria.where("dictionaryTypeId")
-                .is(params.getDictionaryTypeId()));
-        return entityTemplate.count(dictionaryTypeIdQuery, DictionaryValue.class)
-                .switchIfEmpty(Mono.just(0L))
-                .doOnNext(count -> entity.setSerialNumber(count.intValue() + 1))
-                .flatMap(count -> entityTemplate.insert(entity))
+        Criteria dictionaryTypeId = Criteria.where("dictionaryTypeId").is(params.getDictionaryTypeId());
+        return Mono.justOrEmpty(params.getSerialNumber())
+                .switchIfEmpty(Mono.defer(() -> entityOperations
+                        .count(Query.query(dictionaryTypeId), DictionaryValue.class)
+                        .map(aLong -> aLong.intValue() + 1)
+                        .doOnNext(params::setSerialNumber)
+                ))
+                .flatMap(serialNumber -> {
+                    DictionaryValue entity = BeanUtils.map(params, DictionaryValue.class);
+                    entity.setDictionaryTypeCode("");
+                    entity.setCreatorId(params.getOperatorId());
+                    entity.setCreatedTime(LocalDateTime.now());
+                    entity.setModifierId(entity.getCreatorId());
+                    entity.setModifiedTime(entity.getCreatedTime());
+                    entity.setSerialNumber(serialNumber);
+                    return entityOperations.insert(entity);
+                })
                 .map(item -> BeanUtils.map(item, DictionaryValueVO.class))
                 .doOnNext(item -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(item, params)));
     }
@@ -90,11 +92,12 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
         Pageable finalPageable = pageable == null ? PageRequest.of(0, 10) : pageable;
         Criteria where = buildCriteria(params);
 
-        return entityTemplate.count(Query.query(where), DictionaryValue.class)
+        return entityOperations.count(Query.query(where), DictionaryValue.class)
                 .flatMap(total -> total == 0L ? Mono.empty() : Mono.just(total))
                 .<Page<DictionaryValueVO>>flatMap(total -> {
-                    Query query = Query.query(where).with(finalPageable).sort(finalPageable.getSortOr(Sort.by("createdTime").descending()));
-                    return entityTemplate.select(query, DictionaryValue.class)
+                    Query query = Query.query(where).with(finalPageable)
+                            .sort(finalPageable.getSortOr(Sort.by("dictionaryTypeId", "serialNumber")));
+                    return entityOperations.select(query, DictionaryValue.class)
                             .map(item -> BeanUtils.map(item, DictionaryValueVO.class))
                             .reduce(new ArrayList<>(), StreamUtils.reduceToCollection())
                             .map(item -> new PageImpl<>(item, finalPageable, total));
@@ -109,10 +112,10 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
         if (params == null) params = DictionaryValueQuery.DEFAULT;
         if (params.getCreatedTime() == null) params.setCreatedTime(Range.LocalDateTime.DEFAULT);
         if (params.getModifiedTime() == null) params.setModifiedTime(Range.LocalDateTime.DEFAULT);
-        if (sort == null) sort = Sort.by("createdTime").descending();
+        if (sort == null) sort = Sort.by("dictionaryTypeId", "serialNumber");
         Criteria where = buildCriteria(params);
         Query query = Query.query(where).sort(sort).limit(100);
-        return entityTemplate.select(query, DictionaryValue.class)
+        return entityOperations.select(query, DictionaryValue.class)
                 .map(item -> BeanUtils.map(item, DictionaryValueVO.class));
     }
 
@@ -124,7 +127,7 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
 //                CriteriaUtils.nullableCriteria(Criteria.where("id")::is, params::getId),
 //        );
         Criteria where = Criteria.where("id").is(params.getId());
-        return entityTemplate.selectOne(Query.query(where), DictionaryValue.class)
+        return entityOperations.selectOne(Query.query(where), DictionaryValue.class)
                 .map(item -> BeanUtils.map(item, DictionaryValueVO.class));
     }
 
@@ -134,16 +137,18 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
         log.info("修改字典项值信息[{}]", params);
         Criteria where = Criteria.where("id").is(params.getId());
         Query idQuery = Query.query(where);
-        return entityTemplate.selectOne(idQuery, DictionaryValue.class)
-                .map(item -> BeanUtils.map(item, DictionaryValueVO.class))
+        return entityOperations.selectOne(idQuery, DictionaryValue.class)
                 .zipWhen(entity -> {
                     DictionaryValue modify = BeanUtils.map(params, DictionaryValue.class);
                     modify.setModifierId(params.getOperatorId());
                     modify.setModifiedTime(LocalDateTime.now());
                     Update update = UpdateUtils.selectiveUpdateFromExample(modify);
-                    return entityTemplate.update(idQuery, update, DictionaryValue.class);
+                    return entityOperations.update(idQuery, update, DictionaryValue.class);
                 })
-                .doOnNext(tuple2 -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(tuple2.getT1(), params)))
+                .doOnNext(tuple2 -> {
+                    DictionaryValueVO vo = BeanUtils.map(tuple2.getT1(), DictionaryValueVO.class);
+                    eventPublisher.publishEvent(new PayloadApplicationEvent<>(vo, params));
+                })
                 .map(Tuple2::getT2)
                 .switchIfEmpty(Mono.just(0));
     }
@@ -154,10 +159,12 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
         log.info("删除字典项值信息[{}]", params);
         Criteria where = Criteria.where("id").is(params.getId());
         Query idQuery = Query.query(where);
-        return entityTemplate.selectOne(idQuery, DictionaryValue.class)
-                .map(item -> BeanUtils.map(item, DictionaryValueVO.class))
-                .zipWhen(region -> entityTemplate.delete(idQuery, DictionaryValue.class))
-                .doOnNext(tuple2 -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(tuple2.getT1(), params)))
+        return entityOperations.selectOne(idQuery, DictionaryValue.class)
+                .zipWhen(entity -> entityOperations.delete(idQuery, DictionaryValue.class))
+                .doOnNext(tuple2 -> {
+                    DictionaryValueVO vo = BeanUtils.map(tuple2.getT1(), DictionaryValueVO.class);
+                    eventPublisher.publishEvent(new PayloadApplicationEvent<>(vo, params));
+                })
                 .map(Tuple2::getT2)
                 .switchIfEmpty(Mono.just(0));
     }

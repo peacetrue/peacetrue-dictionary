@@ -1,11 +1,15 @@
 package com.github.peacetrue.dictionary;
 
+import com.github.peacetrue.dictionary.modules.dictionaryvalue.PropertyNameConvention;
+import com.github.peacetrue.dictionary.modules.dictionaryvalue.PropertyNameConventionImpl;
+import com.github.peacetrue.r2dbc.PeaceR2dbcRepository;
+import com.github.peacetrue.r2dbc.PeaceR2dbcRepositoryImpl;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 
 import java.util.Objects;
 
@@ -22,6 +26,17 @@ public class ServiceDictionaryAutoConfiguration {
 
     public ServiceDictionaryAutoConfiguration(ServiceDictionaryProperties properties) {
         this.properties = Objects.requireNonNull(properties);
+    }
+
+    @Bean
+    public PeaceR2dbcRepository r2dbcRepository() {
+        return new PeaceR2dbcRepositoryImpl();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(PropertyNameConvention.class)
+    public PropertyNameConvention propertyNameConvention() {
+        return new PropertyNameConventionImpl();
     }
 
 }
