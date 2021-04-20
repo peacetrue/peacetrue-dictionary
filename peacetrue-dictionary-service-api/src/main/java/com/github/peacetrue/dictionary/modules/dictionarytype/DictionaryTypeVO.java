@@ -1,9 +1,11 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
+import com.github.peacetrue.dictionary.modules.dictionaryvalue.DictionaryValueVO;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author xiayx
@@ -29,4 +31,6 @@ public class DictionaryTypeVO implements Serializable {
     private Long modifierId;
     /** 最近修改时间 */
     private LocalDateTime modifiedTime;
+    /** 字典值集合 */
+    private List<DictionaryValueVO> dictionaryValues;
 }

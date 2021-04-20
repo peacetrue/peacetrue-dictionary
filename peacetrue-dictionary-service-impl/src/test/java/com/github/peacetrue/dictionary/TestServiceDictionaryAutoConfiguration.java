@@ -38,7 +38,7 @@ public class TestServiceDictionaryAutoConfiguration {
     public void initializeDatabase(ConnectionFactory connectionFactory) {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         Resource[] scripts = new Resource[]{
-                resourceLoader.getResource("classpath:schema-h2.sql"),
+                resourceLoader.getResource("classpath:schema-dictionary-h2.sql"),
 //                resourceLoader.getResource("classpath:data.sql")
         };
         new ResourceDatabasePopulator(scripts).execute(connectionFactory).block();

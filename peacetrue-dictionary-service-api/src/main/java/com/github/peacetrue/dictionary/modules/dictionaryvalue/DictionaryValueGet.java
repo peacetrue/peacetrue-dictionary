@@ -15,16 +15,23 @@ import javax.validation.constraints.Size;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@MultiNotNull(propertyNames = {"id", "code"})
 public class DictionaryValueGet extends OperatorCapableImpl<Long> {
 
     private static final long serialVersionUID = 0L;
 
     private Long id;
+
+    @Size(min = 1, max = 32)
+    private String dictionaryTypeCode;
     @Size(min = 1, max = 32)
     private String code;
 
     public DictionaryValueGet(Long id) {
         this.id = id;
+    }
+
+    public DictionaryValueGet(String dictionaryTypeCode, String code) {
+        this.dictionaryTypeCode = dictionaryTypeCode;
+        this.code = code;
     }
 }

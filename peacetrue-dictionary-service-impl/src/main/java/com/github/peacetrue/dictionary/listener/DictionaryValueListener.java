@@ -13,6 +13,7 @@ import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.r2dbc.core.R2dbcEntityOperations;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import reactor.core.scheduler.Schedulers;
 
 /**
@@ -31,6 +32,7 @@ public class DictionaryValueListener {
     @EventListener
     public void setDictionaryTypeCodeAfterDictionaryValueAdd(PayloadApplicationEvent<DictionaryValueAdd> event) {
         DictionaryValueVO source = (DictionaryValueVO) event.getSource();
+        if (!StringUtils.isEmpty(event.getPayload().getDictionaryTypeCode())) return;
         log.info("新增字典值[{}]后，设置字典类型编码", source);
         entityOperations.selectOne(QueryUtils.id(source::getDictionaryTypeId), DictionaryType.class)
                 .flatMap(dictionaryType -> peaceR2dbcRepository.setPropertyValue(

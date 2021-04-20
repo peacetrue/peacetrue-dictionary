@@ -1,9 +1,11 @@
 package com.github.peacetrue.dictionary;
 
+import com.github.peacetrue.dictionary.modules.dictionarytype.DictionaryType;
 import com.github.peacetrue.dictionary.modules.dictionaryvalue.PropertyNameConvention;
 import com.github.peacetrue.dictionary.modules.dictionaryvalue.PropertyNameConventionImpl;
 import com.github.peacetrue.r2dbc.PeaceR2dbcRepository;
 import com.github.peacetrue.r2dbc.PeaceR2dbcRepositoryImpl;
+import com.github.peacetrue.spring.data.relational.TableSchemaInitializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -39,4 +41,8 @@ public class ServiceDictionaryAutoConfiguration {
         return new PropertyNameConventionImpl();
     }
 
+    @Bean
+    public TableSchemaInitializer dictionaryTableSchemaInitializer() {
+        return new TableSchemaInitializer(DictionaryType.class, "/schema-dictionary-mysql.sql");
+    }
 }

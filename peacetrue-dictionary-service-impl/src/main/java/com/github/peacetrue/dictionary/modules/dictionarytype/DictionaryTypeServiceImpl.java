@@ -1,6 +1,8 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
+import com.github.peacetrue.core.Operators;
 import com.github.peacetrue.core.Range;
+import com.github.peacetrue.dictionary.modules.dictionaryvalue.DictionaryValueService;
 import com.github.peacetrue.spring.data.relational.core.query.CriteriaUtils;
 import com.github.peacetrue.spring.data.relational.core.query.UpdateUtils;
 import com.github.peacetrue.spring.util.BeanUtils;
@@ -39,6 +41,8 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
     private R2dbcEntityTemplate entityTemplate;
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+    @Autowired
+    private DictionaryValueService dictionaryValueService;
 
     public static Criteria buildCriteria(DictionaryTypeQuery params) {
         return CriteriaUtils.and(
@@ -58,14 +62,31 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
     @Transactional
     public Mono<DictionaryTypeVO> add(DictionaryTypeAdd params) {
         log.info("新增字典类型信息[{}]", params);
+        if (params.getRemark() == null) params.setRemark("");
         DictionaryType entity = BeanUtils.map(params, DictionaryType.class);
-        if (entity.getRemark() == null) entity.setRemark("");
         entity.setCreatorId(params.getOperatorId());
         entity.setCreatedTime(LocalDateTime.now());
         entity.setModifierId(entity.getCreatorId());
         entity.setModifiedTime(entity.getCreatedTime());
         return entityTemplate.insert(entity)
                 .map(item -> BeanUtils.map(item, DictionaryTypeVO.class))
+                .flatMap(vo -> {
+                    return Mono.justOrEmpty(params.getDictionaryValues())
+                            .flatMapMany(Flux::fromIterable)
+                            .index()
+                            .doOnNext(tuple2 -> {
+                                tuple2.getT2().setDictionaryTypeId(vo.getId());
+                                tuple2.getT2().setDictionaryTypeCode(vo.getCode());
+                                tuple2.getT2().setSerialNumber(tuple2.getT1().intValue() + 1);
+                                Operators.setOperator(params, tuple2.getT2());
+                            })
+                            .map(Tuple2::getT2)
+                            .flatMap(dictionaryValueService::add)
+                            .collectList()
+                            .doOnNext(vo::setDictionaryValues)
+                            .thenReturn(vo)
+                            ;
+                })
                 .doOnNext(item -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(item, params)));
     }
 

@@ -60,17 +60,18 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
     @Transactional
     public Mono<DictionaryValueVO> add(DictionaryValueAdd params) {
         log.info("新增字典项值信息[{}]", params);
+        if (params.getDictionaryTypeCode() == null) params.setDictionaryTypeCode("");
         if (params.getRemark() == null) params.setRemark("");
         Criteria dictionaryTypeId = Criteria.where("dictionaryTypeId").is(params.getDictionaryTypeId());
         return Mono.justOrEmpty(params.getSerialNumber())
-                .switchIfEmpty(Mono.defer(() -> entityOperations
-                        .count(Query.query(dictionaryTypeId), DictionaryValue.class)
-                        .map(aLong -> aLong.intValue() + 1)
-                        .doOnNext(params::setSerialNumber)
+                .switchIfEmpty(Mono.defer(() ->
+                        entityOperations
+                                .count(Query.query(dictionaryTypeId), DictionaryValue.class)
+                                .map(aLong -> aLong.intValue() + 1)
+                                .doOnNext(params::setSerialNumber)
                 ))
                 .flatMap(serialNumber -> {
                     DictionaryValue entity = BeanUtils.map(params, DictionaryValue.class);
-                    entity.setDictionaryTypeCode("");
                     entity.setCreatorId(params.getOperatorId());
                     entity.setCreatedTime(LocalDateTime.now());
                     entity.setModifierId(entity.getCreatorId());
@@ -123,10 +124,11 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
     @Transactional(readOnly = true)
     public Mono<DictionaryValueVO> get(DictionaryValueGet params, String... projection) {
         log.info("获取字典项值信息[{}]", params);
-//        Criteria where = CriteriaUtils.and(
-//                CriteriaUtils.nullableCriteria(Criteria.where("id")::is, params::getId),
-//        );
-        Criteria where = Criteria.where("id").is(params.getId());
+        Criteria where = CriteriaUtils.and(
+                CriteriaUtils.nullableCriteria(Criteria.where("id")::is, params::getId),
+                CriteriaUtils.nullableCriteria(Criteria.where("dictionaryTypeCode")::is, params::getDictionaryTypeCode),
+                CriteriaUtils.nullableCriteria(Criteria.where("code")::is, params::getCode)
+        );
         return entityOperations.selectOne(Query.query(where), DictionaryValue.class)
                 .map(item -> BeanUtils.map(item, DictionaryValueVO.class));
     }

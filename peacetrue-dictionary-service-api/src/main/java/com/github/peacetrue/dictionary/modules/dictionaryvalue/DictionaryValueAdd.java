@@ -22,6 +22,9 @@ public class DictionaryValueAdd extends OperatorCapableImpl<Long> {
     /** 字典类型. 主键 */
     @NotNull
     private Long dictionaryTypeId;
+    /** 字典类型编码 */
+    @Size(min = 1, max = 32)
+    private String dictionaryTypeCode;
     /** 编码 */
     @NotNull
     @Size(min = 1, max = 32)
@@ -36,4 +39,15 @@ public class DictionaryValueAdd extends OperatorCapableImpl<Long> {
     @Size(min = 1, max = 255)
     private String remark;
 
+    public DictionaryValueAdd(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    public DictionaryValueAdd(String code, String name, Integer serialNumber, String remark) {
+        this.code = code;
+        this.name = name;
+        this.serialNumber = serialNumber;
+        this.remark = remark;
+    }
 }

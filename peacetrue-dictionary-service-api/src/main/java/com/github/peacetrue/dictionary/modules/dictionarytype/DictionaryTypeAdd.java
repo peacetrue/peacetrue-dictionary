@@ -1,11 +1,12 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
 import com.github.peacetrue.core.OperatorCapableImpl;
+import com.github.peacetrue.dictionary.modules.dictionaryvalue.DictionaryValueAdd;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 
 /**
@@ -29,8 +30,21 @@ public class DictionaryTypeAdd extends OperatorCapableImpl<Long> {
     @Size(min = 1, max = 32)
     private String name;
     /** 备注 */
-    @NotNull
     @Size(min = 1, max = 255)
     private String remark;
+    /** 字典值集合 */
+    private List<DictionaryValueAdd> dictionaryValues;
+
+    public DictionaryTypeAdd(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    public DictionaryTypeAdd(String code, String name, String remark) {
+        this.code = code;
+        this.name = name;
+        this.remark = remark;
+    }
+
 
 }
