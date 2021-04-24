@@ -1,6 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
-import com.github.peacetrue.core.OperatorCapableImpl;
+import com.github.peacetrue.core.OperatorImpl;
 import com.github.peacetrue.core.Range;
 import lombok.*;
 
@@ -13,7 +13,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryTypeQuery extends OperatorCapableImpl<Long> {
+public class DictionaryTypeQuery extends OperatorImpl<Long> {
 
     public static final DictionaryTypeQuery DEFAULT = new DictionaryTypeQuery();
 

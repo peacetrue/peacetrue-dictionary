@@ -2,6 +2,7 @@ package com.github.peacetrue.dictionary.modules.dictionarytype;
 
 import com.github.peacetrue.dictionary.modules.dictionaryvalue.DictionaryValueVO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author xiayx
  */
 @Data
+@EqualsAndHashCode(exclude = "dictionaryValues")
 public class DictionaryTypeVO implements Serializable {
 
     private static final long serialVersionUID = 0L;

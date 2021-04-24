@@ -1,6 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
-import com.github.peacetrue.core.OperatorCapableImpl;
+import com.github.peacetrue.core.OperatorImpl;
 import com.github.peacetrue.dictionary.modules.dictionaryvalue.DictionaryValueAdd;
 import lombok.*;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryTypeAdd extends OperatorCapableImpl<Long> {
+public class DictionaryTypeAdd extends OperatorImpl<Long> {
 
     private static final long serialVersionUID = 0L;
 
@@ -45,6 +45,5 @@ public class DictionaryTypeAdd extends OperatorCapableImpl<Long> {
         this.name = name;
         this.remark = remark;
     }
-
 
 }

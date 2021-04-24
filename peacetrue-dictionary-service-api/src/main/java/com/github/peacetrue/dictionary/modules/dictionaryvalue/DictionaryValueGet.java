@@ -1,6 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
-import com.github.peacetrue.core.OperatorCapableImpl;
+import com.github.peacetrue.core.OperatorImpl;
 import com.github.peacetrue.validation.constraints.multinotnull.MultiNotNull;
 import lombok.*;
 
@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryValueGet extends OperatorCapableImpl<Long> {
+public class DictionaryValueGet extends OperatorImpl<Long> {
 
     private static final long serialVersionUID = 0L;
 

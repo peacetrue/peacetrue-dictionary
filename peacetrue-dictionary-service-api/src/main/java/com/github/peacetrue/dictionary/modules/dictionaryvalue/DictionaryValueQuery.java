@@ -1,6 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
-import com.github.peacetrue.core.OperatorCapableImpl;
+import com.github.peacetrue.core.OperatorImpl;
 import com.github.peacetrue.core.Range;
 import lombok.*;
 
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryValueQuery extends OperatorCapableImpl<Long> {
+public class DictionaryValueQuery extends OperatorImpl<Long> {
 
     public static final DictionaryValueQuery DEFAULT = new DictionaryValueQuery();
 

@@ -3,11 +3,15 @@ package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 import com.github.peacetrue.dictionary.TestServiceDictionaryAutoConfiguration;
 import com.github.peacetrue.spring.util.BeanUtils;
 import org.jeasy.random.EasyRandom;
+import org.jeasy.random.EasyRandomParameters;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.ActiveProfiles;
 import reactor.test.StepVerifier;
+
+import java.io.Serializable;
 
 
 /**
@@ -15,10 +19,11 @@ import reactor.test.StepVerifier;
  * @since : 2020-05-22 16:43
  **/
 @SpringBootTest(classes = TestServiceDictionaryAutoConfiguration.class)
+@ActiveProfiles("dictionary-service-test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class DictionaryValueServiceImplTest {
 
-    public static final EasyRandom EASY_RANDOM = new EasyRandom();
+    public static final EasyRandom EASY_RANDOM = new EasyRandom(new EasyRandomParameters().randomize(Serializable.class, () -> 1L));
     public static final DictionaryValueAdd ADD = EASY_RANDOM.nextObject(DictionaryValueAdd.class);
     public static final DictionaryValueModify MODIFY = EASY_RANDOM.nextObject(DictionaryValueModify.class);
     public static DictionaryValueVO vo;

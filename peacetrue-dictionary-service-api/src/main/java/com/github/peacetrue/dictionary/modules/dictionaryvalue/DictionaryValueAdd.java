@@ -1,8 +1,10 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
-import com.github.peacetrue.core.OperatorCapableImpl;
+import com.github.peacetrue.core.OperatorImpl;
 import lombok.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,12 +17,13 @@ import javax.validation.constraints.Size;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryValueAdd extends OperatorCapableImpl<Long> {
+public class DictionaryValueAdd extends OperatorImpl<Long> {
 
     private static final long serialVersionUID = 0L;
 
     /** 字典类型. 主键 */
     @NotNull
+    @Min(1)
     private Long dictionaryTypeId;
     /** 字典类型编码 */
     @Size(min = 1, max = 32)
@@ -34,6 +37,8 @@ public class DictionaryValueAdd extends OperatorCapableImpl<Long> {
     @Size(min = 1, max = 255)
     private String name;
     /** 序号 */
+    @Min(1)
+    @Max(Short.MAX_VALUE)
     private Integer serialNumber;
     /** 备注 */
     @Size(min = 1, max = 255)

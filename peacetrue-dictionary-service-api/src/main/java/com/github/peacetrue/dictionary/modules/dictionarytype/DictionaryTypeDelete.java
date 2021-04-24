@@ -1,6 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
-import com.github.peacetrue.core.OperatorCapableImpl;
+import com.github.peacetrue.core.OperatorImpl;
 import lombok.*;
 
 import javax.validation.constraints.Min;
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryTypeDelete extends OperatorCapableImpl<Long> {
+public class DictionaryTypeDelete extends OperatorImpl<Long> {
 
     private static final long serialVersionUID = 0L;
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.function.Consumer;
@@ -18,15 +19,16 @@ import java.util.function.Consumer;
  */
 @SpringBootTest(classes = TestControllerDictionaryAutoConfiguration.class)
 @AutoConfigureWebTestClient
+@ActiveProfiles({"dictionary-controller-test", "dictionary-service-test"})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DictionaryTypeControllerTest {
+class DictionaryTypeControllerTest {
 
     @Autowired
     private WebTestClient client;
 
     @Test
     @Order(10)
-    public void add() {
+    void add() {
         this.client.post().uri("/dictionary-types")
                 .bodyValue(DictionaryTypeServiceImplTest.ADD)
                 .accept(MediaType.APPLICATION_JSON)
@@ -38,7 +40,7 @@ public class DictionaryTypeControllerTest {
 
     @Test
     @Order(20)
-    public void queryForPage() {
+    void queryForPage() {
         this.client.get()
                 .uri("/dictionary-types?page=0")
                 .accept(MediaType.APPLICATION_JSON)
@@ -50,7 +52,7 @@ public class DictionaryTypeControllerTest {
 
     @Test
     @Order(30)
-    public void queryForList() {
+    void queryForList() {
         this.client.get()
                 .uri("/dictionary-types")
                 .accept(MediaType.APPLICATION_JSON)
@@ -62,7 +64,7 @@ public class DictionaryTypeControllerTest {
 
     @Test
     @Order(40)
-    public void get() {
+    void get() {
         this.client.get()
                 .uri("/dictionary-types/{0}", DictionaryTypeServiceImplTest.vo.getId())
                 .accept(MediaType.APPLICATION_JSON)
@@ -75,7 +77,7 @@ public class DictionaryTypeControllerTest {
 
     @Test
     @Order(50)
-    public void modify() {
+    void modify() {
         DictionaryTypeModify modify = DictionaryTypeServiceImplTest.MODIFY;
         modify.setId(DictionaryTypeServiceImplTest.vo.getId());
         this.client.put()
@@ -90,7 +92,7 @@ public class DictionaryTypeControllerTest {
 
     @Test
     @Order(60)
-    public void delete() {
+    void delete() {
         this.client.delete()
                 .uri("/dictionary-types/{0}", DictionaryTypeServiceImplTest.vo.getId())
                 .accept(MediaType.APPLICATION_JSON)
