@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * @author xiayx
+ * @author peace
  */
 @Data
 public class DictionaryValueVO implements Serializable {

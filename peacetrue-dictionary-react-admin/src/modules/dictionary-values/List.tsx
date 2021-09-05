@@ -11,8 +11,8 @@ import {
   TextInput
 } from 'react-admin';
 import DictionaryValueMessages from "./Messages";
-import {ExporterBuilder, PeaceList} from "peacetrue-react-admin";
-import {UserCreatedTimeFilter, UserCreateFields} from "peacetrue-user";
+import {ExporterBuilder, PeaceList} from "@peace/react-admin";
+import {UserCreatedTimeFilter, UserCreateFields} from "@peace/user";
 
 const Filters = (props: any) => (
   <Filter {...props}>

@@ -1,4 +1,4 @@
-import {PeaceEdit} from 'peacetrue-react-admin';
+import {PeaceEdit} from '@peace/react-admin';
 import * as React from 'react';
 import {
   EditProps,
@@ -10,7 +10,7 @@ import {
   TextField,
   TextInput
 } from 'react-admin';
-import {UserCreateModifyFields} from "peacetrue-user";
+import {UserCreateModifyFields} from "@peace/user";
 
 export const DictionaryValueEdit = (props: EditProps) => {
   console.info('DictionaryValueEdit:', props);

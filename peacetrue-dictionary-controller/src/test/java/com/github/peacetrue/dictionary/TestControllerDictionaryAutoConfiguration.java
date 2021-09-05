@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguratio
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author xiayx
+ * @author peace
  */
 @Configuration
 @ImportAutoConfiguration(classes = {

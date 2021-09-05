@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 /**
  * 字典类型服务接口
  *
- * @author xiayx
+ * @author peace
  */
 public interface DictionaryTypeService {
 

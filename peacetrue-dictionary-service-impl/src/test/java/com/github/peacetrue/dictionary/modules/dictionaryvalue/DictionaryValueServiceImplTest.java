@@ -15,8 +15,8 @@ import java.io.Serializable;
 
 
 /**
- * @author : xiayx
- * @since : 2020-05-22 16:43
+ * @author peace
+ * @since 1.0.0
  **/
 @SpringBootTest(classes = TestServiceDictionaryAutoConfiguration.class)
 @ActiveProfiles("dictionary-service-test")

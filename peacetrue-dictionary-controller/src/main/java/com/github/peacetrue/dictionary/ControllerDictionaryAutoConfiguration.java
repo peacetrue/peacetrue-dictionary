@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 
 
 /**
- * @author xiayx
+ * @author peace
  */
 @Configuration
 @EnableConfigurationProperties(ControllerDictionaryProperties.class)

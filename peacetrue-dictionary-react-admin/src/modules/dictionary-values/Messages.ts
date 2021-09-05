@@ -1,4 +1,4 @@
-import {Messages} from "peacetrue-user";
+import {Messages} from "@peace/user";
 
 export const DictionaryValueMessages = {
   resources: {

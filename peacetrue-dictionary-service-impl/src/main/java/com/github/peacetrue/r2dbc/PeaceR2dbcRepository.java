@@ -4,8 +4,8 @@ import com.github.peacetrue.core.IdCapable;
 import reactor.core.publisher.Mono;
 
 /**
- * @author : xiayx
- * @since : 2020-12-15 07:04
+ * @author peace
+ * @since 1.0.0
  **/
 public interface PeaceR2dbcRepository {
 

@@ -1,7 +1,7 @@
-import {PeaceShow} from 'peacetrue-react-admin';
+import {PeaceShow} from '@peace/react-admin';
 import * as React from 'react';
 import {ShowProps, SimpleShowLayout, TextField} from 'react-admin';
-import {UserCreateModifyFields} from "peacetrue-user";
+import {UserCreateModifyFields} from "@peace/user";
 
 export const DictionaryTypeShow = (props: ShowProps) => {
   console.info('DictionaryTypeShow:', props);

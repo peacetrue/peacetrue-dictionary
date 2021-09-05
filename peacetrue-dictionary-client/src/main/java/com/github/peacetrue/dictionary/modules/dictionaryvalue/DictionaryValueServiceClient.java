@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 /**
  * 字典项值客户端
  *
- * @author xiayx
+ * @author peace
  */
 @ReactiveFeignClient(name = "peacetrue-dictionary", url = "${peacetrue.DictionaryValue.url:${peacetrue.server.url:}}")
 public interface DictionaryValueServiceClient {

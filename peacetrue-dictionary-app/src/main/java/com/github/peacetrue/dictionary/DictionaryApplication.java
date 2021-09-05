@@ -23,7 +23,7 @@ import org.springframework.web.reactive.result.method.annotation.ArgumentResolve
 import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
- * @author xiayx
+ * @author peace
  */
 @SpringBootApplication
 public class DictionaryApplication {

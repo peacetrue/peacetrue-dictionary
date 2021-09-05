@@ -15,7 +15,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.util.function.Consumer;
 
 /**
- * @author xiayx
+ * @author peace
  */
 @SpringBootTest(classes = TestControllerDictionaryAutoConfiguration.class)
 @AutoConfigureWebTestClient

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 /**
  * 字典项值实体类
  *
- * @author xiayx
+ * @author peace
  */
 @Getter
 @Setter

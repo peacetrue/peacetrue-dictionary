@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * @author xiayx
+ * @author peace
  */
 @Data
 @EqualsAndHashCode(exclude = "dictionaryValues")

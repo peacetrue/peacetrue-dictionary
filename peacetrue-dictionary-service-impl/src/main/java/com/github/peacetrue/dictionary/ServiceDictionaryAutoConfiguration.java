@@ -14,7 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 import java.util.Objects;
 
 /**
- * @author xiayx
+ * @author peace
  */
 @Configuration
 @EnableConfigurationProperties(ServiceDictionaryProperties.class)

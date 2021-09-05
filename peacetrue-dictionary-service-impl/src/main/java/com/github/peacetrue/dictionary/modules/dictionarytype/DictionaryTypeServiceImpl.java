@@ -31,7 +31,7 @@ import java.util.Collections;
 /**
  * 字典类型服务实现
  *
- * @author xiayx
+ * @author peace
  */
 @Slf4j
 @Service
