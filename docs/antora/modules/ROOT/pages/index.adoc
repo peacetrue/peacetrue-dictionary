@@ -4,7 +4,7 @@
 :app-name: peacetrue-dictionary
 :app-version: 1.0.0-SNAPSHOT
 :app-ra-version: 0.0.0-1
-:foresight-repo-id:
+:foresight-repo-id: f2c2d17d-617d-4466-9624-e8b878d6aaf1
 :imagesdir: docs/antora/modules/ROOT/assets/images
 
 image:https://img.shields.io/github/workflow/status/peacetrue/{app-name}/build/master["GitHub Workflow Status",link="https://github.com/peacetrue/{app-name}/actions"]
