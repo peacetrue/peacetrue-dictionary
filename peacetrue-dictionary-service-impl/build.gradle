@@ -1,16 +1,3 @@
-configurations {
-    testArtifacts.extendsFrom testRuntime, testImplementation
-}
-
-task testJar(type: Jar) {
-    archiveClassifier = "test"
-    from sourceSets.test.output
-}
-
-artifacts {
-    testArtifacts testJar
-}
-
 description "数据字典服务实现"
 
 dependencies {
