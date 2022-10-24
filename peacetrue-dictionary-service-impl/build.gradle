@@ -29,4 +29,5 @@ dependencies {
     testImplementation "org.flywaydb:flyway-mysql"
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
+    testImplementation "io.projectreactor:reactor-test"
 }

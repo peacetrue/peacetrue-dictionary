@@ -7,3 +7,7 @@ version "${peaceDictionaryVersion}${tailSnapshot}"
 description "数据字典"
 
 apply plugin: "com.github.peacetrue.gradle.build-convention"
+
+ext {
+    isPublishDisabled = true
+}
