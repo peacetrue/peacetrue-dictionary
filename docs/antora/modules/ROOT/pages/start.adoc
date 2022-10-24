@@ -5,7 +5,7 @@
 
 [source%nowrap,bash,subs="specialchars,attributes"]
 ----
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/peacetrue/peacetrue-dictionary/run-webflux.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/peacetrue/peacetrue-dictionary/1.0.0/run-webflux.sh)"
 ----
 
 本地已安装 pnpm，
@@ -13,6 +13,6 @@
 
 [source%nowrap,bash,subs="specialchars,attributes"]
 ----
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/peacetrue/peacetrue-dictionary/run-react-admin.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/peacetrue/peacetrue-dictionary/1.0.0/run-react-admin.sh)"
 ----
 

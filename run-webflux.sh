@@ -1,16 +1,16 @@
 #!/bin/bash
 
-app-name="peacetrue-dictionary"
-app-version="1.0.0-SNAPSHOT"
+app_name="peacetrue-dictionary"
+app_version="1.0.0-SNAPSHOT"
 
-git clone -b "${app-version}" https://peacetrue.cn/peacetrue-application
+git clone -b "1.0.0" https://github.com/peacetrue/peacetrue-application
 cd peacetrue-application || exit
 tee peacetrue-application-webflux/extend.gradle <<EOF
 dependencies {
   // 服务实现
-  implementation "com.github.peacetrue.dictionary:${app-name}-service-impl:${app-version}"
+  implementation "com.github.peacetrue.dictionary:${app_name}-service-impl:${app_version}"
   // 控制器
-  implementation "com.github.peacetrue.dictionary:${app-name}-controller:${app-version}"
+  implementation "com.github.peacetrue.dictionary:${app_name}-controller:${app_version}"
 }
 EOF
 
