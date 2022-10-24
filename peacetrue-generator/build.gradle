@@ -1,0 +1,86 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        mavenCentral()
+    }
+
+    dependencies {
+        // 引入目录模板引擎 Gradle 插件，详情参考 https://peacetrue.github.io/peacetrue-template
+        classpath "com.github.peacetrue.template:peacetrue-template-gradle:1.1.0-SNAPSHOT"
+        // 引入 Antora 目录模板，详情参考 https://peacetrue.github.io/peacetrue-template-antora
+        classpath "com.github.peacetrue.templates:peacetrue-template-antora:1.0.0-SNAPSHOT"
+        // 引入 Gradle 目录模板，详情参考 https://peacetrue.github.io/peacetrue-template-gradle
+        classpath "com.github.peacetrue.templates:peacetrue-template-gradle:1.0.0-SNAPSHOT"
+        // 引入 Spring Boot 目录模板，详情参考 https://peacetrue.github.io/peacetrue-template-springboot
+        classpath "com.github.peacetrue.templates:peacetrue-template-springboot:1.0.0-SNAPSHOT"
+        // 引入 React Admin 目录模板，详情参考 https://peacetrue.github.io/peacetrue-template-reactadmin
+        classpath "com.github.peacetrue.templates:peacetrue-template-reactadmin:1.0.0-SNAPSHOT"
+        // 引入更多自定义模板
+    }
+}
+
+// 执行目录模板引擎 Gradle 插件
+apply plugin: "com.github.peacetrue.template"
+
+// 生成器项目所在目录上一级为实际项目目录
+def projectName = "peacetrue-react-admin"
+def projectPath = "${System.getenv("workingDir")}/$projectName"
+// 配置目录模板引擎，以下示例生成 learn-java 项目
+templateEngine {
+    // 统一声明变量，在多个目录模板之间使用，设计目录模板时尽可能使用不同的变量，避免变量冲突
+    def repository = [
+            name        : "$projectName",
+            title       : "React Admin 扩展类库",
+            website     : "https://peacetrue.github.io",
+            dependencies: [],
+    ]
+
+    // 生成 Antora 文档
+    evaluate {
+        // 模板位置。使用类路径，必须在 buildscript 中引入相应依赖，
+        // 多个目录模板之间使用逗号分割，例如：classpath:antora,classpath:gradle
+        // 还可以使用文件路径，此时无需引入依赖，例如：file:/path/to/you/template
+        templateLocation = "classpath:antora"
+        // 变量。后续会修改变量值，这里使用克隆。变量具体说明需参考相关文档
+        variables = [repository: repository.clone()]
+        // 结果路径。生成的文件存放的目录，这里生成到实际项目中
+        resultPath = projectPath
+    }
+
+    // 生成后端模块 learn-java-backend
+/*
+    evaluate {
+        repository.put("name", "$projectName-backend")
+        templateLocation = "classpath:gradle,classpath:springboot"
+        variables = [repository: repository.clone()]
+        resultPath = "$projectPath/${repository['name']}"
+    }
+*/
+
+    // 生成前端模块 learn-java-frontend
+/*
+    evaluate {
+        repository.put("name", "$projectName-frontend")
+        templateLocation = "classpath:reactadmin"
+        variables = [repository: repository.clone()]
+        resultPath = "$projectPath/${repository['name']}"
+    }
+*/
+
+    /*
+    // 多次配置渲染参数，可同时执行多个目录模板
+    evaluate {
+    }
+    */
+}
+
+evaluate.finalizedBy("open")
+task open(group: "peacetrue-template-engine") {
+    doLast {
+        exec {
+            commandLine("openidea", "$projectPath")
+        }
+    }
+}
+

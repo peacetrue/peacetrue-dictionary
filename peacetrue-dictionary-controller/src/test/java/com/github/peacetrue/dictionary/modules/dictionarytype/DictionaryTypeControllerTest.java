@@ -1,10 +1,8 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
-import com.github.peacetrue.dictionary.TestControllerDictionaryAutoConfiguration;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import com.github.peacetrue.dictionary.DictionaryControllerTestAutoConfiguration;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,12 +10,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.function.Consumer;
 
 /**
  * @author peace
  */
-@SpringBootTest(classes = TestControllerDictionaryAutoConfiguration.class)
+@SpringBootTest(
+        classes = DictionaryControllerTestAutoConfiguration.class,
+        properties = {"db.schema=dictionary_type_controller"}
+)
 @AutoConfigureWebTestClient
 @ActiveProfiles({"dictionary-controller-test", "dictionary-service-test"})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -25,6 +28,19 @@ class DictionaryTypeControllerTest {
 
     @Autowired
     private WebTestClient client;
+
+    @SneakyThrows
+    @BeforeAll
+    static void beforeAll() {
+        Files.deleteIfExists(Paths.get("dictionary_type_controller.mv.db"));
+    }
+
+    @SneakyThrows
+    @AfterAll
+    static void afterAll() {
+        // 测试完成后，删除 h2 的数据存储文件
+        Files.deleteIfExists(Paths.get("dictionary_type_controller.mv.db"));
+    }
 
     @Test
     @Order(10)
@@ -42,7 +58,7 @@ class DictionaryTypeControllerTest {
     @Order(20)
     void queryForPage() {
         this.client.get()
-                .uri("/dictionary-types?page=0")
+                .uri("/dictionary-types")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -54,7 +70,7 @@ class DictionaryTypeControllerTest {
     @Order(30)
     void queryForList() {
         this.client.get()
-                .uri("/dictionary-types")
+                .uri("/dictionary-types?rtn=list")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -74,14 +90,13 @@ class DictionaryTypeControllerTest {
                 .expectBody(DictionaryTypeVO.class).isEqualTo(DictionaryTypeServiceImplTest.vo);
     }
 
-
     @Test
     @Order(50)
     void modify() {
         DictionaryTypeModify modify = DictionaryTypeServiceImplTest.MODIFY;
         modify.setId(DictionaryTypeServiceImplTest.vo.getId());
         this.client.put()
-                .uri("/dictionary-types/{id}", DictionaryTypeServiceImplTest.vo.getId())
+                .uri("/dictionary-types")
                 .bodyValue(modify)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()

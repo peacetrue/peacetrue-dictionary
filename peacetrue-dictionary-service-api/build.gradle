@@ -1,11 +1,12 @@
-description '字典服务接口'
+description "数据字典服务接口"
 
 dependencies {
-    api 'com.github.peacetrue:peacetrue-core'
-    api 'com.google.code.findbugs:jsr305'
-    api 'io.projectreactor:reactor-core'
-    api 'org.springframework.data:spring-data-commons'
+    api "com.github.peacetrue:peacetrue-beans"
+    api "com.github.peacetrue:peacetrue-common"
+    api "com.google.code.findbugs:jsr305"
+    api "io.projectreactor:reactor-core"
+    compileOnly "org.springframework.data:spring-data-commons"
 
-    compileOnly 'javax.validation:validation-api'
-    compileOnly 'com.github.peacetrue:peacetrue-validation'
+    compileOnly "javax.validation:validation-api"
+    compileOnly "com.github.peacetrue:peacetrue-validation"
 }

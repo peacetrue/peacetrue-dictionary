@@ -1,6 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
-import com.github.peacetrue.core.IdCapable;
+import com.github.peacetrue.beans.properties.id.IdCapable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

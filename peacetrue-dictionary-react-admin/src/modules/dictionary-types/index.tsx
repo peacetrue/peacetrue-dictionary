@@ -12,6 +12,6 @@ export const DictionaryType = {
   edit: DictionaryTypeEdit,
   show: DictionaryTypeShow
 };
-export const DictionaryTypeResource = <Resource name="dictionary-types" {...DictionaryType} />;
+export const DictionaryTypeResource = <Resource key="dictionary-types" name="dictionary-types" {...DictionaryType} />;
 export default DictionaryTypeResource;
 export * from "./Messages"

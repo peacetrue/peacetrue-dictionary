@@ -1,31 +1,26 @@
 import * as React from 'react';
-import {Datagrid, EditButton, Filter, ListProps, TextField, TextInput} from 'react-admin';
-import DictionaryTypeMessages from "./Messages";
-import {ExporterBuilder, PeaceList} from "@peace/react-admin";
-import {UserCreatedTimeFilter, UserCreateFields} from "@peace/user";
+import {Datagrid, DateField, DateInput, EditButton, Filter, List, ListProps, TextField, TextInput} from 'react-admin';
 
 const Filters = (props: any) => (
   <Filter {...props}>
-    <TextInput source="code" allowEmpty alwaysOn resettable/>
-    <TextInput source="name" allowEmpty alwaysOn resettable/>
-    {UserCreatedTimeFilter}
+    <TextInput source="code" alwaysOn resettable/>
+    <TextInput source="name" alwaysOn resettable/>
+    <DateInput source="createdTime.lowerBound" alwaysOn/>
+    <DateInput source="createdTime.upperBound" alwaysOn/>
   </Filter>
 );
 
 export const DictionaryTypeList = (props: ListProps) => {
-  console.info('DictionaryTypeList:', props);
   return (
-    <PeaceList {...props}
-               filters={<Filters/>}
-               exporter={ExporterBuilder(DictionaryTypeMessages.resources["dictionary-types"])}
-    >
+    <List {...props} filters={<Filters/>}>
       <Datagrid rowClick="show">
         <TextField source="code"/>
         <TextField source="name"/>
         <TextField source="remark"/>
-        {UserCreateFields}
+        <DateField source="createdTime" showTime/>
+        <DateField source="modifiedTime" showTime/>
         <EditButton/>
       </Datagrid>
-    </PeaceList>
+    </List>
   )
 };

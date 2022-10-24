@@ -5,7 +5,6 @@ import {DictionaryValueList} from './List';
 import {DictionaryValueCreate} from './Create';
 import {DictionaryValueEdit} from './Edit';
 import {DictionaryValueShow} from './Show';
-import BookIcon from '@material-ui/icons/Book';
 
 export const DictionaryValue = {
   list: DictionaryValueList,
@@ -13,7 +12,7 @@ export const DictionaryValue = {
   edit: DictionaryValueEdit,
   show: DictionaryValueShow
 };
-export const DictionaryValueResource = <Resource icon={BookIcon} name="dictionary-values" {...DictionaryValue} />;
+// react-jsx-dev-runtime.development.js:87 Warning: Each child in a list should have a unique "key" prop. Check the render method of `App`. See https://reactjs.org/link/warning-keys for more information.
+export const DictionaryValueResource = <Resource key="dictionary-values" name="dictionary-values" {...DictionaryValue} />;
 export default DictionaryValueResource;
 export * from "./Messages"
-export * from "./ReferencePropsBuilder"

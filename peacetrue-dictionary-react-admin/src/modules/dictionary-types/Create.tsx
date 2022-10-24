@@ -2,7 +2,6 @@ import * as React from 'react';
 import {Create, CreateProps, maxLength, required, SimpleForm, TextInput} from 'react-admin';
 
 export const DictionaryTypeCreate = (props: CreateProps) => {
-  console.info('DictionaryTypeCreate:', props);
   return (
     <Create {...props}>
       <SimpleForm>

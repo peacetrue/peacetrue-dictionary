@@ -1,0 +1,61 @@
+= 概述
+:github: https://github.com/peacetrue
+:website: https://peacetrue.github.io
+:app-name: peacetrue-dictionary
+:app-version: 1.0.0-SNAPSHOT
+:app-ra-version: 0.0.0-1
+:foresight-repo-id:
+:imagesdir: docs/antora/modules/ROOT/assets/images
+
+// image:https://img.shields.io/github/workflow/status/peacetrue/{app-name}/build/master["GitHub Workflow Status",link="https://github.com/peacetrue/{app-name}/actions"]
+// image:https://snyk.io/test/github/peacetrue/{app-name}/badge.svg["Snyk",link="https://app.snyk.io/org/peacetrue"]
+// image:https://api-public.service.runforesight.com/api/v1/badge/success?repoId={foresight-repo-id}["Foresight",link="https://foresight.thundra.io/repositories/github/peacetrue/{app-name}/test-runs"]
+// image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codecov",link="https://app.codecov.io/gh/peacetrue/{app-name}"]
+
+//@formatter:off
+
+== 简介（What）
+
+{website}/{app-name}/[{app-name}] 是一个数据字典模块，包含字典类型和字典项值。
+
+== 背景（Why）
+
+数据字典用于表示现实世界中的类型概念，
+比如性别包括男、女，性别为字典类型，男、女为字典项值。
+数据字典在各个系统中都会使用到，所以将其实现为一个单独模块以便复用。
+
+== 用法（How）
+
+在基于 Spring Boot 的项目中，引用如下依赖：
+
+[source%nowrap,gradle,subs="attributes"]
+----
+implementation "com.github.peacetrue.dictionary:{app-name}-service-api:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-service-impl:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-controller:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-client:{app-version}"
+----
+
+// 最新版本可从 https://search.maven.org/search?q=com.github.peacetrue.dictionary[maven^] 中查看。
+可从 https://oss.sonatype.org/index.html#nexus-search;quick~com.github.peacetrue.dictionary[Sonatype^] 中查看最新版本。
+
+在基于 React Admin 的项目中，安装如下依赖：
+
+[source%nowrap,bash,subs="attributes"]
+----
+npm install @peace/dictionary-react-admin@{app-ra-version}
+----
+
+== 参与者（Who）
+
+. peace(xiayouxue@hotmail.com)
+
+== 活动（When）
+
+初始提交于 2022-10-20，
+最近提交于 {docdate}。
+
+== 许可证（License）
+
+https://github.com/peacetrue/{app-name}/blob/master/LICENSE[Apache License 2.0^]
+

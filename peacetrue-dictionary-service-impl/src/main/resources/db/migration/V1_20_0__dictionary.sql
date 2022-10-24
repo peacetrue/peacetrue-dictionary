@@ -11,8 +11,8 @@ create table dictionary_type
     modified_time datetime        not null comment '最近修改时间'
 ) COMMENT '字典类型';
 
-create unique index dictionary_type_code on dictionary_type (code);
-create index dictionary_type_name on dictionary_type (name);
+create unique index uk_code on dictionary_type (code);
+create index idx_name on dictionary_type (name);
 
 drop table if exists dictionary_value;
 create table dictionary_value
@@ -30,4 +30,5 @@ create table dictionary_value
     modified_time        datetime          not null comment '最近修改时间'
 ) comment '字典项值';
 
-create unique index dictionary_value_code on dictionary_value (dictionary_type_id, code);
+create unique index uk__dictionary_type_code__code on dictionary_value (dictionary_type_code, code);
+

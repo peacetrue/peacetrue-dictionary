@@ -3,7 +3,11 @@ logging:
     com.github.peacetrue: trace
 #    org.springframework: debug
 
-peacetrue:
-  init:
-    schema-script-locations:
-      'com.github.peacetrue.dictionary.modules.dictionarytype.DictionaryType': /schema-dictionary-h2.sql
+db.schema: test
+
+# 使用 h2 时，必须使用 file，不能使用 mem，mem 是基于连接的，flyway 操作完数据库之后，关闭连接，数据丢失
+spring:
+  flyway:
+    url: jdbc:h2:file:./${db.schema};MODE=MySQL;DATABASE_TO_LOWER=TRUE
+  r2dbc:
+    url: r2dbc:h2:file:///./${db.schema};MODE=MySQL;DATABASE_TO_LOWER=TRUE

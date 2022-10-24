@@ -1,93 +1,102 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * 字典项值控制器
+ * 字典项值控制器。
  *
  * @author peace
  */
 @Slf4j
 @RestController
 @RequestMapping(value = "/dictionary-values")
+@AllArgsConstructor
 public class DictionaryValueController {
 
-    @Autowired
     private DictionaryValueService dictionaryValueService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public Mono<DictionaryValueVO> addByForm(DictionaryValueAdd params) {
-        log.info("新增字典项值信息(请求方法+表单参数)[{}]", params);
-        return dictionaryValueService.add(params);
-    }
-
+    /**
+     * 根据请求体，新增字典项值。
+     *
+     * @param params 新增参数
+     * @return 字典项值视图
+     */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<DictionaryValueVO> addByJson(@RequestBody DictionaryValueAdd params) {
-        log.info("新增字典项值信息(请求方法+JSON参数)[{}]", params);
+    public Mono<DictionaryValueVO> add(@RequestBody DictionaryValueAdd params) {
+        log.info("add DictionaryValue by json params(body): {}", params);
         return dictionaryValueService.add(params);
     }
 
-    @GetMapping(params = "page")
-    public Mono<Page<DictionaryValueVO>> query(DictionaryValueQuery params, Pageable pageable, String... projection) {
-        log.info("分页查询字典项值信息(请求方法+参数变量)[{}]", params);
-        return dictionaryValueService.query(params, pageable, projection);
-    }
-
+    /**
+     * 分页查询字典项值集合。
+     *
+     * @param params     查询参数
+     * @param pageable   分页参数
+     * @param projection 投影
+     * @return 字典项值视图分页
+     */
     @GetMapping
-    public Flux<DictionaryValueVO> query(DictionaryValueQuery params, Sort sort, String... projection) {
-        log.info("全量查询字典项值信息(请求方法+参数变量)[{}]", params);
-        return dictionaryValueService.query(params, sort, projection);
+    public Mono<Page<DictionaryValueVO>> queryPage(DictionaryValueQuery params, Pageable pageable, String... projection) {
+        log.info("page query DictionaryValue by form params(url): {}", params);
+        return dictionaryValueService.queryPage(params, pageable, projection);
     }
 
+    /**
+     * 列表查询字典项值集合，使用 rtn=list 区别于分页查询字典项值集合。
+     *
+     * @param params     查询参数
+     * @param pageable   分页参数
+     * @param projection 投影
+     * @return 字典项值视图集合
+     */
+    @GetMapping(params = "rtn=list")
+    public Flux<DictionaryValueVO> queryList(DictionaryValueQuery params, Pageable pageable, String... projection) {
+        log.info("list query DictionaryValue by form params(url): {}", params);
+        return dictionaryValueService.queryList(params, pageable, projection);
+    }
+
+    /**
+     * 根据路径参数，获取字典项值。
+     *
+     * @param id         主键
+     * @param projection 投影
+     * @return 字典项值视图
+     */
     @GetMapping("/{id}")
-    public Mono<DictionaryValueVO> getByUrlPathVariable(@PathVariable Long id, String... projection) {
-        log.info("获取字典项值信息(请求方法+路径变量)详情[{}]", id);
-        return dictionaryValueService.get(new DictionaryValueGet(id), projection);
+    public Mono<DictionaryValueVO> get(@PathVariable Long id, String... projection) {
+        log.info("get DictionaryValue by path params(url): {}", id);
+        return dictionaryValueService.get(DictionaryValueGet.builder().id(id).build(), projection);
     }
 
-    @RequestMapping("/get")
-    public Mono<DictionaryValueVO> getByPath(DictionaryValueGet params, String... projection) {
-        log.info("获取字典项值信息(请求路径+参数变量)详情[{}]", params);
-        return dictionaryValueService.get(params, projection);
-    }
-
-    @PutMapping(value = {"", "/*"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public Mono<Integer> modifyByForm(DictionaryValueModify params) {
-        log.info("修改字典项值信息(请求方法+表单参数)[{}]", params);
+    /**
+     * 根据请求体，修改字典项值。
+     *
+     * @param params 修改参数
+     * @return 受影响的行数
+     */
+    @RequestMapping(method = {RequestMethod.PUT, RequestMethod.PATCH}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<Integer> modify(@RequestBody DictionaryValueModify params) {
+        log.info("modify DictionaryValue by json params(body): {}", params);
         return dictionaryValueService.modify(params);
     }
 
-    @PutMapping(value = {"", "/*"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<Integer> modifyByJson(@RequestBody DictionaryValueModify params) {
-        log.info("修改字典项值信息(请求方法+JSON参数)[{}]", params);
-        return dictionaryValueService.modify(params);
-    }
-
+    /**
+     * 根据路径变量，删除字典项值。
+     *
+     * @param id 主键
+     * @return 受影响的行数
+     */
     @DeleteMapping("/{id}")
-    public Mono<Integer> deleteByUrlPathVariable(@PathVariable Long id) {
-        log.info("删除字典项值信息(请求方法+URL路径变量)[{}]", id);
+    public Mono<Integer> delete(@PathVariable Long id) {
+        log.info("delete DictionaryValue by path params(url): {}", id);
         return dictionaryValueService.delete(new DictionaryValueDelete(id));
     }
-
-    @DeleteMapping(params = "id")
-    public Mono<Integer> deleteByUrlParamVariable(DictionaryValueDelete params) {
-        log.info("删除字典项值信息(请求方法+URL参数变量)[{}]", params);
-        return dictionaryValueService.delete(params);
-    }
-
-    @RequestMapping(path = "/delete")
-    public Mono<Integer> deleteByPath(DictionaryValueDelete params) {
-        log.info("删除字典项值信息(请求路径+URL参数变量)[{}]", params);
-        return dictionaryValueService.delete(params);
-    }
-
 
 }

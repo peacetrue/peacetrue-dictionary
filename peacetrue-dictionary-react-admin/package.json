@@ -1,7 +1,7 @@
 {
-  "name": "@peace/dictionary",
+  "name": "@peace/dictionary-react-admin",
   "version": "0.0.0-1",
-  "description": "字典",
+  "description": "数据字典",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -23,11 +23,9 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@peace/react-admin": "^0.0.0-1",
-    "@peace/user": "^0.0.0-1",
-    "react": "^17.0.2",
-    "react-admin": "^3.14.5",
-    "react-dom": "^17.0.2"
+    "react": "^18.2.0",
+    "react-admin": "^4.4.1",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.9.1",

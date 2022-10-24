@@ -1,16 +1,24 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
+import com.github.peacetrue.beans.properties.id.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+ * 字典值项视图。
+ *
  * @author peace
  */
 @Data
-public class DictionaryValueVO implements Serializable {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class DictionaryValueVO implements Serializable, Id<Long> {
 
     private static final long serialVersionUID = 0L;
 

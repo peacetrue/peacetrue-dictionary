@@ -1,22 +1,28 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
-import com.github.peacetrue.core.OperatorImpl;
-import lombok.*;
+import com.github.peacetrue.validation.constraints.multinotnull.MultiNotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 
 /**
+ * 字典类型修改参数。
+ *
  * @author peace
  */
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryTypeModify extends OperatorImpl<Long> {
+@MultiNotNull(properties = {"name", "remark"})
+public class DictionaryTypeModify implements Serializable {
 
     private static final long serialVersionUID = 0L;
 
@@ -24,17 +30,11 @@ public class DictionaryTypeModify extends OperatorImpl<Long> {
     @NotNull
     @Min(1)
     private Long id;
-    /** 编码 */
-    @NotNull
-    @Size(min = 1, max = 32)
-    private String code;
     /** 名称 */
-    @NotNull
     @Size(min = 1, max = 32)
     private String name;
     /** 备注 */
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     private String remark;
 
 }

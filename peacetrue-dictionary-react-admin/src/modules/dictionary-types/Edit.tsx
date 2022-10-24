@@ -1,18 +1,16 @@
-import {PeaceEdit} from '@peace/react-admin';
 import * as React from 'react';
-import {EditProps, maxLength, required, SimpleForm, TextField, TextInput} from 'react-admin';
-import {UserCreateModifyFields} from "@peace/user";
+import {DateTimeInput, Edit, EditProps, maxLength, required, SimpleForm, TextInput} from 'react-admin';
 
 export const DictionaryTypeEdit = (props: EditProps) => {
-  console.info('DictionaryTypeEdit:', props);
   return (
-    <PeaceEdit {...props}>
+    <Edit {...props}>
       <SimpleForm>
-        <TextField source="code"/>
+        <TextInput source="code" disabled/>
         <TextInput source="name" validate={[required(), maxLength(32)]}/>
         <TextInput source="remark" validate={[maxLength(255)]} fullWidth multiline/>
-        {UserCreateModifyFields}
+        <DateTimeInput source="createdTime" disabled/>
+        <DateTimeInput source="modifiedTime" disabled/>
       </SimpleForm>
-    </PeaceEdit>
+    </Edit>
   );
 };

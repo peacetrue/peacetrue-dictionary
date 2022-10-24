@@ -1,40 +1,52 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
-import com.github.peacetrue.dictionary.TestServiceDictionaryAutoConfiguration;
-import com.github.peacetrue.spring.util.BeanUtils;
+import com.github.peacetrue.dictionary.DictionaryServiceTestAutoConfiguration;
+import com.github.peacetrue.spring.beans.BeanUtils;
+import com.github.peacetrue.spring.data.domain.PageableUtils;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.jeasy.random.EasyRandom;
-import org.jeasy.random.EasyRandomParameters;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import reactor.test.StepVerifier;
 
-import java.io.Serializable;
-
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Map;
 
 /**
  * @author peace
- * @since 1.0.0
  **/
-@SpringBootTest(classes = TestServiceDictionaryAutoConfiguration.class)
+@Slf4j
+@SpringBootTest(
+        classes = DictionaryServiceTestAutoConfiguration.class,
+        properties = {"db.schema=dictionary_type_service"}
+)
 @ActiveProfiles("dictionary-service-test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class DictionaryTypeServiceImplTest {
-
-    public static final EasyRandom EASY_RANDOM = new EasyRandom(new EasyRandomParameters().randomize(Serializable.class, () -> 1L));
+public class DictionaryTypeServiceImplTest {
+    public static final EasyRandom EASY_RANDOM = new EasyRandom();
     public static final DictionaryTypeAdd ADD = EASY_RANDOM.nextObject(DictionaryTypeAdd.class);
     public static final DictionaryTypeModify MODIFY = EASY_RANDOM.nextObject(DictionaryTypeModify.class);
     public static DictionaryTypeVO vo;
 
-    static {
-        ADD.setOperatorId(EASY_RANDOM.nextObject(Long.class));
-        MODIFY.setOperatorId(EASY_RANDOM.nextObject(Long.class));
-    }
-
     @Autowired
     private DictionaryTypeServiceImpl service;
+
+    @SneakyThrows
+    @BeforeAll
+    static void beforeAll() {
+        Files.deleteIfExists(Paths.get("dictionary_type_service.mv.db"));
+    }
+
+    @SneakyThrows
+    @AfterAll
+    static void afterAll() {
+        // 测试完成后，删除 h2 的数据存储文件
+        Files.deleteIfExists(Paths.get("dictionary_type_service.mv.db"));
+    }
 
     @Test
     @Order(10)
@@ -42,8 +54,11 @@ class DictionaryTypeServiceImplTest {
         service.add(ADD)
                 .as(StepVerifier::create)
                 .assertNext(data -> {
-                    Assertions.assertEquals(data.getCreatorId(), ADD.getOperatorId());
-                    vo = data;
+                    Map<String, Object> vo = BeanUtils.getPropertyValues(data);
+                    Map<String, Object> add = BeanUtils.getPropertyValues(ADD);
+                    add.remove("dictionaryValues");
+                    Assertions.assertTrue(vo.entrySet().containsAll(add.entrySet()));
+                    DictionaryTypeServiceImplTest.vo = data;
                 })
                 .verifyComplete();
     }
@@ -51,8 +66,8 @@ class DictionaryTypeServiceImplTest {
     @Test
     @Order(20)
     void queryForPage() {
-        DictionaryTypeQuery params = BeanUtils.map(vo, DictionaryTypeQuery.class);
-        service.query(params, PageRequest.of(0, 10))
+        DictionaryTypeQuery params = BeanUtils.convert(vo, DictionaryTypeQuery.class);
+        service.queryPage(params, PageableUtils.PAGEABLE_DEFAULT)
                 .as(StepVerifier::create)
                 .assertNext(page -> Assertions.assertEquals(1, page.getTotalElements()))
                 .verifyComplete();
@@ -61,8 +76,8 @@ class DictionaryTypeServiceImplTest {
     @Test
     @Order(30)
     void queryForList() {
-        DictionaryTypeQuery params = BeanUtils.map(vo, DictionaryTypeQuery.class);
-        service.query(params)
+        DictionaryTypeQuery params = BeanUtils.convert(vo, DictionaryTypeQuery.class);
+        service.queryList(params, PageableUtils.PAGEABLE_DEFAULT)
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();
@@ -71,7 +86,7 @@ class DictionaryTypeServiceImplTest {
     @Test
     @Order(40)
     void get() {
-        DictionaryTypeGet params = BeanUtils.map(vo, DictionaryTypeGet.class);
+        DictionaryTypeGet params = BeanUtils.convert(vo, DictionaryTypeGet.class);
         service.get(params)
                 .as(StepVerifier::create)
                 .assertNext(item -> Assertions.assertEquals(vo.getId(), item.getId()))

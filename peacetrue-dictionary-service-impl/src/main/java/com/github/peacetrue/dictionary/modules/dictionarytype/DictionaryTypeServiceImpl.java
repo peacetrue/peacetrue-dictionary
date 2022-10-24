@@ -1,19 +1,21 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
-import com.github.peacetrue.core.Operators;
-import com.github.peacetrue.core.Range;
-import com.github.peacetrue.dictionary.modules.dictionaryvalue.DictionaryValueService;
+import com.github.peacetrue.operator.OperatorSupplier;
+import com.github.peacetrue.range.LocalDateTimeRange;
+import com.github.peacetrue.spring.beans.BeanUtils;
+import com.github.peacetrue.spring.data.domain.SortUtils;
 import com.github.peacetrue.spring.data.relational.core.query.CriteriaUtils;
+import com.github.peacetrue.spring.data.relational.core.query.QueryUtils;
 import com.github.peacetrue.spring.data.relational.core.query.UpdateUtils;
-import com.github.peacetrue.spring.util.BeanUtils;
-import com.github.peacetrue.util.DateUtils;
-import com.github.peacetrue.util.StreamUtils;
+import com.github.peacetrue.util.ObjectUtils;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.PayloadApplicationEvent;
-import org.springframework.data.domain.*;
-import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.r2dbc.core.R2dbcEntityOperations;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.relational.core.query.Query;
 import org.springframework.data.relational.core.query.Update;
@@ -23,140 +25,116 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
-import javax.annotation.Nullable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * 字典类型服务实现
+ * 字典类型服务实现。
  *
  * @author peace
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class DictionaryTypeServiceImpl implements DictionaryTypeService {
 
-    @Autowired
-    private R2dbcEntityTemplate entityTemplate;
-    @Autowired
+    private R2dbcEntityOperations entityOperations;
+    private OperatorSupplier operatorSupplier;
     private ApplicationEventPublisher eventPublisher;
-    @Autowired
-    private DictionaryValueService dictionaryValueService;
 
-    public static Criteria buildCriteria(DictionaryTypeQuery params) {
+    /**
+     * 构建查询条件。
+     *
+     * @param params 查询参数
+     * @return 查询条件
+     */
+    private static Criteria buildCriteria(DictionaryTypeQuery params) {
+        LocalDateTimeRange createdTime = ObjectUtils.invokeSafely(params.getCreatedTime(), LocalDateTimeRange.DEFAULT, range -> range.truncatedToDays());
+        LocalDateTimeRange modifiedTime = ObjectUtils.invokeSafely(params.getModifiedTime(), LocalDateTimeRange.DEFAULT, range -> range.truncatedToDays());
         return CriteriaUtils.and(
                 CriteriaUtils.nullableCriteria(CriteriaUtils.smartIn("id"), params::getId),
-                CriteriaUtils.nullableCriteria(Criteria.where("code")::is, params::getCode),
+                CriteriaUtils.nullableCriteria(Criteria.where("code")::like, value -> "%" + value + "%", params::getCode),
                 CriteriaUtils.nullableCriteria(Criteria.where("name")::like, value -> "%" + value + "%", params::getName),
-                CriteriaUtils.nullableCriteria(Criteria.where("creatorId")::is, params::getCreatorId),
-                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::greaterThanOrEquals, params.getCreatedTime()::getLowerBound),
-                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::lessThan, DateUtils.DATE_CELL_EXCLUDE, params.getCreatedTime()::getUpperBound),
-                CriteriaUtils.nullableCriteria(Criteria.where("modifierId")::is, params::getModifierId),
-                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::greaterThanOrEquals, params.getModifiedTime()::getLowerBound),
-                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::lessThan, DateUtils.DATE_CELL_EXCLUDE, params.getModifiedTime()::getUpperBound)
+                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::greaterThanOrEquals, createdTime::getLowerBound),
+                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::lessThan, createdTime::getUpperBound),
+                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::greaterThanOrEquals, modifiedTime::getLowerBound),
+                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::lessThan, modifiedTime::getUpperBound)
         );
     }
 
     @Override
     @Transactional
     public Mono<DictionaryTypeVO> add(DictionaryTypeAdd params) {
-        log.info("新增字典类型信息[{}]", params);
-        if (params.getRemark() == null) params.setRemark("");
-        DictionaryType entity = BeanUtils.map(params, DictionaryType.class);
-        entity.setCreatorId(params.getOperatorId());
+        log.info("add DictionaryType: {}", params);
+        DictionaryType entity = BeanUtils.convert(params, DictionaryType.class);
+        ObjectUtils.setDefault(entity::getRemark, entity::setRemark, "");
+        entity.setCreatorId((Long) operatorSupplier.getOperator().getId());
         entity.setCreatedTime(LocalDateTime.now());
         entity.setModifierId(entity.getCreatorId());
         entity.setModifiedTime(entity.getCreatedTime());
-        return entityTemplate.insert(entity)
-                .map(item -> BeanUtils.map(item, DictionaryTypeVO.class))
-                .flatMap(vo -> {
-                    return Mono.justOrEmpty(params.getDictionaryValues())
-                            .flatMapMany(Flux::fromIterable)
-                            .index()
-                            .doOnNext(tuple2 -> {
-                                tuple2.getT2().setDictionaryTypeId(vo.getId());
-                                tuple2.getT2().setDictionaryTypeCode(vo.getCode());
-                                tuple2.getT2().setSerialNumber(tuple2.getT1().intValue() + 1);
-                                Operators.setOperator(params, tuple2.getT2());
-                            })
-                            .map(Tuple2::getT2)
-                            .flatMap(dictionaryValueService::add)
-                            .collectList()
-                            .doOnNext(vo::setDictionaryValues)
-                            .thenReturn(vo)
-                            ;
-                })
-                .doOnNext(item -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(item, params)));
+        return entityOperations.insert(entity)
+                .map(item -> BeanUtils.convert(item, DictionaryTypeVO.class))
+                // 发布一个后置新增事件，新增字典值项集合，避免依赖 DictionaryValueService
+                .doOnNext(vo -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(vo, params)))
+                ;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<Page<DictionaryTypeVO>> query(DictionaryTypeQuery params, @Nullable Pageable pageable, String... projection) {
-        log.info("分页查询字典类型信息[{}]", params);
-        if (params.getCreatedTime() == null) params.setCreatedTime(Range.LocalDateTime.DEFAULT);
-        if (params.getModifiedTime() == null) params.setModifiedTime(Range.LocalDateTime.DEFAULT);
-        Pageable finalPageable = pageable == null ? PageRequest.of(0, 10) : pageable;
+    public Mono<Page<DictionaryTypeVO>> queryPage(DictionaryTypeQuery params, Pageable pageable, String... projection) {
+        log.info("page query DictionaryType: {}", params);
         Criteria where = buildCriteria(params);
-
-        return entityTemplate.count(Query.query(where), DictionaryType.class)
-                .flatMap(total -> total == 0L ? Mono.empty() : Mono.just(total))
+        return entityOperations.count(Query.query(where), DictionaryType.class)
                 .<Page<DictionaryTypeVO>>flatMap(total -> {
-                    Query query = Query.query(where).with(finalPageable).sort(finalPageable.getSortOr(Sort.by("createdTime").descending()));
-                    return entityTemplate.select(query, DictionaryType.class)
-                            .map(item -> BeanUtils.map(item, DictionaryTypeVO.class))
-                            .reduce(new ArrayList<>(), StreamUtils.reduceToCollection())
-                            .map(item -> new PageImpl<>(item, finalPageable, total));
+                    if (total == 0L) {
+                        return Mono.just(new PageImpl<>(Collections.emptyList(), pageable, 0L));
+                    }
+                    Query query = Query.query(where).with(pageable).sort(pageable.getSortOr(SortUtils.SORT_CREATED_TIME_DESC));
+                    return entityOperations.select(query, DictionaryType.class)
+                            .map(item -> BeanUtils.convert(item, DictionaryTypeVO.class))
+                            .collectList()
+                            .map(item -> new PageImpl<>(item, pageable, total));
                 })
-                .doOnNext(item -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(item, params)))
-                .switchIfEmpty(Mono.just(new PageImpl<>(Collections.emptyList(), finalPageable, 0L)));
+                ;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Flux<DictionaryTypeVO> query(DictionaryTypeQuery params, @Nullable Sort sort, String... projection) {
-        log.info("全量查询字典类型信息[{}]", params);
-        if (params.getCreatedTime() == null) params.setCreatedTime(Range.LocalDateTime.DEFAULT);
-        if (params.getModifiedTime() == null) params.setModifiedTime(Range.LocalDateTime.DEFAULT);
-        if (sort == null) sort = Sort.by("createdTime").descending();
-        Criteria where = buildCriteria(params);
-        Query query = Query.query(where).sort(sort).limit(100);
-        return entityTemplate.select(query, DictionaryType.class)
-                .map(item -> BeanUtils.map(item, DictionaryTypeVO.class))
-                .doOnNext(item -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(item, params)))
+    public Flux<DictionaryTypeVO> queryList(DictionaryTypeQuery params, Pageable pageable, String... projection) {
+        log.info("list query DictionaryType: {}", params);
+        Query query = Query.query(buildCriteria(params)).with(pageable).sort(pageable.getSortOr(SortUtils.SORT_CREATED_TIME_DESC));
+        return entityOperations.select(query, DictionaryType.class)
+                .map(item -> BeanUtils.convert(item, DictionaryTypeVO.class))
                 ;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Mono<DictionaryTypeVO> get(DictionaryTypeGet params, String... projection) {
-        log.info("获取字典类型信息[{}]", params);
+        log.info("get DictionaryType: {}", params);
         Criteria where = CriteriaUtils.and(
                 CriteriaUtils.nullableCriteria(Criteria.where("id")::is, params::getId),
                 CriteriaUtils.nullableCriteria(Criteria.where("code")::is, params::getCode)
         );
-        return entityTemplate.selectOne(Query.query(where), DictionaryType.class)
-                .map(item -> BeanUtils.map(item, DictionaryTypeVO.class))
-                .doOnNext(item -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(item, params)))
+        return entityOperations.selectOne(Query.query(where), DictionaryType.class)
+                .map(item -> BeanUtils.convert(item, DictionaryTypeVO.class))
                 ;
     }
 
     @Override
     @Transactional
     public Mono<Integer> modify(DictionaryTypeModify params) {
-        log.info("修改字典类型信息[{}]", params);
-        Criteria where = Criteria.where("id").is(params.getId());
-        Query idQuery = Query.query(where);
-        return entityTemplate.selectOne(idQuery, DictionaryType.class)
-                .map(item -> BeanUtils.map(item, DictionaryTypeVO.class))
+        log.info("modify DictionaryType: {}", params);
+        Query idQuery = QueryUtils.id(params::getId);
+        return entityOperations.selectOne(idQuery, DictionaryType.class)
+                .map(item -> BeanUtils.convert(item, DictionaryTypeVO.class))
                 .zipWhen(entity -> {
-                    DictionaryType modify = BeanUtils.map(params, DictionaryType.class);
-                    modify.setModifierId(params.getOperatorId());
+                    DictionaryType modify = BeanUtils.convert(params, DictionaryType.class);
+                    modify.setModifierId((Long) operatorSupplier.getOperator().getId());
                     modify.setModifiedTime(LocalDateTime.now());
                     Update update = UpdateUtils.selectiveUpdateFromExample(modify);
-                    return entityTemplate.update(idQuery, update, DictionaryType.class);
+                    return entityOperations.update(idQuery, update, DictionaryType.class);
                 })
-                .doOnNext(tuple2 -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(tuple2.getT1(), params)))
                 .map(Tuple2::getT2)
                 .switchIfEmpty(Mono.just(0));
     }
@@ -164,14 +142,13 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
     @Override
     @Transactional
     public Mono<Integer> delete(DictionaryTypeDelete params) {
-        log.info("删除字典类型信息[{}]", params);
-        Criteria where = Criteria.where("id").is(params.getId());
-        Query idQuery = Query.query(where);
-        return entityTemplate.selectOne(idQuery, DictionaryType.class)
-                .map(item -> BeanUtils.map(item, DictionaryTypeVO.class))
-                .zipWhen(region -> entityTemplate.delete(idQuery, DictionaryType.class))
-                .doOnNext(tuple2 -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(tuple2.getT1(), params)))
-                .map(Tuple2::getT2)
+        log.info("delete DictionaryType: {}", params);
+        Query idQuery = QueryUtils.id(params::getId);
+        return entityOperations.selectOne(idQuery, DictionaryType.class)
+                .map(entity -> BeanUtils.convert(entity, DictionaryTypeVO.class))
+                // 发布一个删除前置检查事件，字典值项服务需判断不存在记录方可删除
+                .doOnNext(vo -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(vo, params)))
+                .flatMap(region -> entityOperations.delete(idQuery, DictionaryType.class))
                 .switchIfEmpty(Mono.just(0));
     }
 

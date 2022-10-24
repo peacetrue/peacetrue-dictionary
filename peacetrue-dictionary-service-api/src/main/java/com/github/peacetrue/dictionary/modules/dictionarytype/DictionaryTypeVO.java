@@ -1,19 +1,20 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
+import com.github.peacetrue.beans.properties.id.Id;
 import com.github.peacetrue.dictionary.modules.dictionaryvalue.DictionaryValueVO;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
+ * 字典类型视图。
+ *
  * @author peace
  */
 @Data
-@EqualsAndHashCode(exclude = "dictionaryValues")
-public class DictionaryTypeVO implements Serializable {
+public class DictionaryTypeVO implements Serializable, Id<Long> {
 
     private static final long serialVersionUID = 0L;
 

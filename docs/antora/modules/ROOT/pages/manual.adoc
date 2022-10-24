@@ -1,0 +1,14 @@
+= 用户手册
+
+{app-name} 共包括 5 个模块，4 个后端模块，1 个前端模块。
+
+peacetrue-dictionary-service-api::
+数据字典服务接口。
+peacetrue-dictionary-service-impl::
+数据字典服务实现。
+peacetrue-dictionary-controller::
+数据字典控制器。
+peacetrue-dictionary-client::
+数据字典客户端。
+peacetrue-dictionary-react-admin::
+集成前端 React Admin 模块。

@@ -1,23 +1,20 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
-import com.github.peacetrue.core.IdCapable;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.github.peacetrue.beans.createmodify.CreateModify;
+import com.github.peacetrue.beans.properties.id.IdCapable;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 字典类型实体类
+ * 字典类型实体类。
  *
  * @author peace
  */
-@Getter
-@Setter
-@ToString
-public class DictionaryType implements Serializable, IdCapable<Long> {
+@Data
+public class DictionaryType implements Serializable, IdCapable<Long>, CreateModify<Long, LocalDateTime> {
 
     private static final long serialVersionUID = 0L;
 

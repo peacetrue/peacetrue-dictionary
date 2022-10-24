@@ -1,0 +1,14 @@
+name: peacetrue-dictionary
+title: 数据字典
+version: master
+asciidoc:
+  attributes:
+    numbered: '@'
+    website: https://peacetrue.github.io
+    github: https://github.com/peacetrue
+    app-name: peacetrue-dictionary
+    app-version: 1.0.0-SNAPSHOT
+    app-ra-version: 0.0.0-1
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav.adoc

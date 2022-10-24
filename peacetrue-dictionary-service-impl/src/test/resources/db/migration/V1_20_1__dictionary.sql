@@ -1,0 +1,5 @@
+-- 初始化数据 @formatter:off
+-- insert into dictionary_type (code, name, creator_id, created_time, modifier_id, modified_time) values ('sex', '性别', 0, current_date, 0, current_date);
+-- insert into dictionary_value (dictionary_type_id, dictionary_type_code, code, name, serial_number, creator_id,created_time, modifier_id, modified_time) values
+-- ((select id from dictionary_type where code='sex'),'sex','man','男',1,0,current_date,0,current_date),
+-- ((select id from dictionary_type where code='sex'),'sex','woman','女',1,0,current_date,0,current_date);

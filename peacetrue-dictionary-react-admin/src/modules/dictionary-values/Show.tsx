@@ -1,12 +1,9 @@
 import * as React from 'react';
-import {PeaceShow} from '@peace/react-admin';
-import {ReferenceField, ShowProps, SimpleShowLayout, TextField} from 'react-admin';
-import {UserCreateModifyFields} from "@peace/user";
+import {DateField, ReferenceField, Show, ShowProps, SimpleShowLayout, TextField} from 'react-admin';
 
 export const DictionaryValueShow = (props: ShowProps) => {
-  console.info('DictionaryValueShow:', props);
   return (
-    <PeaceShow {...props}>
+    <Show {...props}>
       <SimpleShowLayout>
         <ReferenceField reference="dictionary-types" source="dictionaryTypeId" link="show">
           <TextField source="name"/>
@@ -14,8 +11,9 @@ export const DictionaryValueShow = (props: ShowProps) => {
         <TextField source="code"/>
         <TextField source="name"/>
         <TextField source="remark"/>
-        {UserCreateModifyFields}
+        <DateField source="createdTime" showTime/>
+        <DateField source="modifiedTime" showTime/>
       </SimpleShowLayout>
-    </PeaceShow>
+    </Show>
   );
 };

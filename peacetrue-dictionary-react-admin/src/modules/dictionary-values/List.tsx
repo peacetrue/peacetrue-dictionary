@@ -1,39 +1,31 @@
 import * as React from 'react';
 import {
   Datagrid,
+  DateField,
+  DateInput,
   EditButton,
   Filter,
+  List,
   ListProps,
   ReferenceField,
-  ReferenceInput,
-  SelectInput,
   TextField,
   TextInput
 } from 'react-admin';
-import DictionaryValueMessages from "./Messages";
-import {ExporterBuilder, PeaceList} from "@peace/react-admin";
-import {UserCreatedTimeFilter, UserCreateFields} from "@peace/user";
+import {DictionaryTypeSelect} from "./DictionaryTypeSelect";
 
 const Filters = (props: any) => (
   <Filter {...props}>
-    <ReferenceInput reference="dictionary-types" source="dictionaryTypeId"
-                    link="show" allowEmpty alwaysOn>
-      <SelectInput source="name" resettable/>
-    </ReferenceInput>
-    <TextInput source="code" allowEmpty alwaysOn resettable/>
-    <TextInput source="name" allowEmpty alwaysOn resettable/>
-    {UserCreatedTimeFilter}
+    {DictionaryTypeSelect()}
+    <TextInput source="code" alwaysOn resettable/>
+    <TextInput source="name" alwaysOn resettable/>
+    <DateInput source="createdTime.lowerBound" alwaysOn/>
+    <DateInput source="createdTime.upperBound" alwaysOn/>
   </Filter>
 );
 
 export const DictionaryValueList = (props: ListProps) => {
-  console.info('DictionaryValueList:', props);
   return (
-    <PeaceList {...props}
-               filters={<Filters/>}
-               exporter={ExporterBuilder(DictionaryValueMessages.resources["dictionary-values"])}
-               sort={undefined}
-    >
+    <List {...props} filters={<Filters/>} sort={undefined}>
       <Datagrid rowClick="show">
         <ReferenceField reference="dictionary-types" source="dictionaryTypeId" link="show">
           <TextField source="name"/>
@@ -41,9 +33,10 @@ export const DictionaryValueList = (props: ListProps) => {
         <TextField source="code"/>
         <TextField source="name"/>
         <TextField source="serialNumber"/>
-        {UserCreateFields}
+        <DateField source="createdTime" showTime/>
+        <DateField source="modifiedTime" showTime/>
         <EditButton/>
       </Datagrid>
-    </PeaceList>
+    </List>
   )
 };

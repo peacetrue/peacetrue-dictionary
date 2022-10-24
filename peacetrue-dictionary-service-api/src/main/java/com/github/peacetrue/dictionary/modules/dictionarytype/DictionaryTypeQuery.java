@@ -1,23 +1,29 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
-import com.github.peacetrue.core.OperatorImpl;
-import com.github.peacetrue.core.Range;
-import lombok.*;
+import com.github.peacetrue.range.LocalDateTimeRange;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 
 /**
+ * 字典类型查询参数。
+ *
  * @author peace
  */
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryTypeQuery extends OperatorImpl<Long> {
-
-    public static final DictionaryTypeQuery DEFAULT = new DictionaryTypeQuery();
+public class DictionaryTypeQuery implements Serializable {
 
     private static final long serialVersionUID = 0L;
+
+    /** 默认占位值，解决 null 引用问题；此值不能被篡改 */
+    public static final DictionaryTypeQuery DEFAULT = new DictionaryTypeQuery();
 
     /** 主键 */
     private Long[] id;
@@ -25,17 +31,9 @@ public class DictionaryTypeQuery extends OperatorImpl<Long> {
     private String code;
     /** 名称 */
     private String name;
-    /** 创建者主键 */
-    private Long creatorId;
     /** 创建时间 */
-    private Range.LocalDateTime createdTime;
-    /** 修改者主键 */
-    private Long modifierId;
+    private LocalDateTimeRange createdTime;
     /** 最近修改时间 */
-    private Range.LocalDateTime modifiedTime;
-
-    public DictionaryTypeQuery(Long[] id) {
-        this.id = id;
-    }
+    private LocalDateTimeRange modifiedTime;
 
 }

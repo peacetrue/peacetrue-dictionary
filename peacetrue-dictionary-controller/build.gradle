@@ -1,11 +1,13 @@
-description '字典控制器'
+description "数据字典控制器"
 
 dependencies {
     api project(":peacetrue-dictionary-service-api")
-    implementation "com.github.peacetrue:peacetrue-spring"
-    implementation "org.springframework.boot:spring-boot-starter-webflux"
-    implementation "org.springframework.data:spring-data-commons"
+    implementation "com.github.peacetrue.spring:peacetrue-spring-beans"
+    compileOnly "org.springframework.boot:spring-boot-starter-webflux"
+    compileOnly "org.springframework.data:spring-data-commons"
 
-    testImplementation project(':peacetrue-dictionary-service-impl')
-    testImplementation project(path: ':peacetrue-dictionary-service-impl', configuration: 'testArtifacts')
+    testImplementation "org.springframework.boot:spring-boot-starter-webflux"
+    testImplementation "org.springframework.data:spring-data-commons"
+    testImplementation project(":peacetrue-dictionary-service-impl")
+    testImplementation project(path: ":peacetrue-dictionary-service-impl", configuration: "testArtifacts")
 }

@@ -1,0 +1,41 @@
+= 常见问题
+
+
+== 实现两种技术栈
+
+如何在一个模块中实现 Spring MVC 和 Spring WebFlux 两种技术栈？
+
+有如下两种方案：
+
+通过模块区分::
+使用 _name_-service-api 表示 Spring MVC 技术栈；
+使用 _name_-service-api-reactor 表示 Spring WebFlux 技术栈。
+通过版本分支区分::
+模块都是 _name_-service-api，
+mvc 分支中使用 Spring MVC 技术栈，对应类库版本 1.x；
+reactor 分支中使用 Spring WebFlux 技术栈，对应类库版本 2.x。
+
+实际选择 *模块区分*。
+
+== ArrayList 的序列化问题
+
+如果元素是不可序列化的，ArrayList 是可序列化的，怎么解决两者的冲突？
+
+== flyway in WebFlux
+
+[source%nowrap,bash]
+----
+cd $workingDir/peacetrue-application-react-admin/src/modules
+lndir $workingDir/peacetrue-dictionary/peacetrue-dictionary-react-admin/src/modules/dictionary-types dictionary-types
+lndir $workingDir/peacetrue-dictionary/peacetrue-dictionary-react-admin/src/modules/dictionary-values dictionary-values
+
+cd $workingDir/peacetrue-application-react-admin/src
+lndir $workingDir/peacetrue-react-admin/src peacetrue-react-admin
+----
+
+== 低代码平台
+
+通过 {app-name} 推动低代码平台建设。
+
+
+

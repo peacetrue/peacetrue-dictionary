@@ -1,0 +1,108 @@
+= 参考指南
+
+
+// @formatter:off
+
+== 需求
+
+[plantuml,format=png,target={app-name}-requirement]
+----
+@startuml
+left to right direction
+'top to bottom direction
+
+:系统/管理员: --> (维护字典项值)
+'note left: 添加/删除字典项值
+:系统/管理员: --> (创建字典类型)
+'note left: 硬编码值，系统运行过程中不能修改/删除
+
+@enduml
+----
+
+== 概要设计
+
+=== 数据模型
+
+[plantuml,format=png,target={app-name}-class]
+----
+@startuml
+left to right direction
+top to bottom direction
+
+class 字典类型 {
+  编码
+  名称
+  备注
+  创建者
+  创建时间
+  修改者
+  最近修改时间
+}
+
+note left of 字典类型::编码
+  硬编码值，唯一
+end note
+
+note right of 字典类型::创建者
+  如无真实创建者，可使用系统表示；修改者同理
+end note
+
+note right of 字典类型::修改者
+  同创建者
+end note
+
+note left of 字典类型::最近修改时间
+  可用于数据同步
+end note
+
+class 字典项值 {
+  字典类型
+  编码
+  名称
+  备注
+  序号
+  创建者
+  创建时间
+  修改者
+  最近修改时间
+}
+
+note left: 如无特殊说明，字段规则同 <b>字典类型</b>
+
+note right of 字典项值::字典类型
+  字典类型和编码联合唯一
+end note
+
+note right of 字典项值::序号
+  用于自定义排序
+end note
+
+字典类型 *-- 字典项值: 聚合
+
+@enduml
+----
+
+=== 功能
+
+==== 创建字典
+
+可以先创建字典类型，随后添加字典项值；
+也可以在创建字典类型的同时添加字典项值。
+
+==== 查询字典
+
+搜索到匹配的字典类型，并查看其字典项值。
+
+==== 修改字典
+
+可以修改字典类型和字典项值的名称和备注信息，不能修改编码。
+
+==== 删除字典
+
+可以删除未被引用的字典项值；
+如果字典类型下无字典项值，也可以删除。
+
+// === 详细设计
+//
+// Spring MVC 和 Spring WebFlux。
+

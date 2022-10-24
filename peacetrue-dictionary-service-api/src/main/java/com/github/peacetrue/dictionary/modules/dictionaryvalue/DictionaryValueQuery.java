@@ -1,22 +1,25 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
-import com.github.peacetrue.core.OperatorImpl;
-import com.github.peacetrue.core.Range;
-import lombok.*;
+import com.github.peacetrue.range.LocalDateTimeRange;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
+import java.io.Serializable;
 
 /**
+ * 字典项值查询参数。
+ *
  * @author peace
  */
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DictionaryValueQuery extends OperatorImpl<Long> {
+public class DictionaryValueQuery implements Serializable {
 
+    /** 默认占位值，解决 null 引用问题；此值不能被篡改 */
     public static final DictionaryValueQuery DEFAULT = new DictionaryValueQuery();
 
     private static final long serialVersionUID = 0L;
@@ -25,29 +28,13 @@ public class DictionaryValueQuery extends OperatorImpl<Long> {
     private Long[] id;
     /** 字典类型. 主键 */
     private Long dictionaryTypeId;
-    /** 字典类型. 冗余编码方便查询 */
-    private String dictionaryTypeCode;
     /** 编码 */
     private String code;
     /** 名称 */
     private String name;
-    /** 序号 */
-    private Integer serialNumber;
-    /** 创建者主键 */
-    private Long creatorId;
     /** 创建时间 */
-    private Range.LocalDateTime createdTime;
-    /** 修改者主键 */
-    private Long modifierId;
+    private LocalDateTimeRange createdTime;
     /** 最近修改时间 */
-    private Range.LocalDateTime modifiedTime;
-
-    public DictionaryValueQuery(Long[] id) {
-        this.id = id;
-    }
-
-    public DictionaryValueQuery(String dictionaryTypeCode) {
-        this.dictionaryTypeCode = dictionaryTypeCode;
-    }
+    private LocalDateTimeRange modifiedTime;
 
 }

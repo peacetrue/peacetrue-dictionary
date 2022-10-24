@@ -1,0 +1,18 @@
+= 快速入门
+
+本地已安装 Java 8 及以上版本，
+运行后端 Spring Boot Webflux 应用：
+
+[source%nowrap,bash,subs="specialchars,attributes"]
+----
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/peacetrue/peacetrue-dictionary/run-webflux.sh)"
+----
+
+本地已安装 pnpm，
+运行前端 React Admin 应用：
+
+[source%nowrap,bash,subs="specialchars,attributes"]
+----
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/peacetrue/peacetrue-dictionary/run-react-admin.sh)"
+----
+
