@@ -11,7 +11,7 @@ export const Resources = [DictionaryTypeResource, DictionaryValueResource]
 EOF
 
 # 设置数据字典中文方言
-tee src/modules/index.tsx <<EOF
+tee src/i18n/index.ts <<EOF
 import {mergeTranslations} from "react-admin";
 import {Messages} from "./Messages_zh";
 import {DictionaryTypeMessages, DictionaryValueMessages} from "@peace/dictionary-react-admin";
