@@ -16,9 +16,9 @@ pluginManagement {
 }
 
 rootProject.name = "peacetrue-dictionary"
-include("peacetrue-dictionary-service-api")
-include("peacetrue-dictionary-service-impl")
-include("peacetrue-dictionary-controller")
+include("peacetrue-dictionary-service-api-reactor")
+include("peacetrue-dictionary-service-impl-reactor")
+include("peacetrue-dictionary-controller-reactor")
 //include("peacetrue-dictionary-app-mono")
 //include("peacetrue-dictionary-app-micro")
 //include("peacetrue-dictionary-client")

@@ -1,16 +1,17 @@
 description "数据字典服务实现"
 
 dependencies {
-    api project(":peacetrue-dictionary-service-api")
-    compileOnly "org.slf4j:slf4j-api"
-    compileOnly "javax.validation:validation-api"
+    api project(":peacetrue-dictionary-service-api-reactor")
+    implementation "org.slf4j:slf4j-api"
+    compileOnly "javax.validation:validation-api" //DictionaryValueAddInner
+    compileOnly "com.github.peacetrue:peacetrue-validation"
     implementation "com.github.peacetrue:peacetrue-beans"
     implementation "com.github.peacetrue.spring:peacetrue-spring-beans"
     implementation "com.github.peacetrue.spring:peacetrue-spring-data"
     implementation "com.github.peacetrue.spring:peacetrue-spring-operator"
 
-    compileOnly "org.springframework.boot:spring-boot-starter-data-r2dbc"
-    compileOnly "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
     compileOnly "org.springframework.boot:spring-boot-configuration-processor"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 

@@ -1,9 +1,9 @@
 description "数据字典控制器"
 
 dependencies {
-    api project(":peacetrue-dictionary-service-api")
-    compileOnly "org.springframework.boot:spring-boot-starter-webflux"
-    compileOnly "org.springframework.data:spring-data-commons"
+    api project(":peacetrue-dictionary-service-api-reactor")
+    implementation "org.springframework.boot:spring-boot-starter-webflux"
+    implementation "org.springframework.data:spring-data-commons"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.boot:spring-boot-starter-webflux"

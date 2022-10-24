@@ -2,11 +2,11 @@
 
 {app-name} 共包括 5 个模块，4 个后端模块，1 个前端模块。
 
-peacetrue-dictionary-service-api::
+peacetrue-dictionary-service-api-reactor::
 数据字典服务接口。
-peacetrue-dictionary-service-impl::
+peacetrue-dictionary-service-impl-reactor::
 数据字典服务实现。
-peacetrue-dictionary-controller::
+peacetrue-dictionary-controller-reactor::
 数据字典控制器。
 peacetrue-dictionary-client::
 数据字典客户端。

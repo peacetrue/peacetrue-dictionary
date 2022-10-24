@@ -17,8 +17,8 @@ dependencies {
     runtimeOnly "mysql:mysql-connector-java"
     implementation "com.github.peacetrue.spring:peacetrue-spring-beans"
     implementation "com.github.peacetrue.spring:peacetrue-spring-operator"
-    implementation project(":peacetrue-dictionary-controller")
-    implementation project(":peacetrue-dictionary-service-impl")
+    implementation project(":peacetrue-dictionary-controller-reactor")
+    implementation project(":peacetrue-dictionary-service-impl-reactor")
 
     implementation "org.springframework.cloud:spring-cloud-config-client"
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
