@@ -1,6 +1,7 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
 import com.github.peacetrue.dictionary.DictionaryControllerTestAutoConfiguration;
+import com.github.peacetrue.dictionary.modules.dictionarytype.DictionaryTypeModify;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 
 /**
  * @author peace
@@ -25,7 +27,7 @@ class DictionaryValueControllerTest {
     @Order(10)
     void add() {
         this.client.post().uri("/dictionary-values")
-                .bodyValue(new DictionaryValueAdd())
+                .body(BodyInserters.fromObject(new DictionaryValueAdd()))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -70,7 +72,7 @@ class DictionaryValueControllerTest {
     void modify() {
         this.client.put()
                 .uri("/dictionary-values")
-                .bodyValue(new DictionaryValueModify())
+                .body(BodyInserters.fromObject(new DictionaryValueModify()))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()

@@ -2,7 +2,6 @@ package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
 import com.github.peacetrue.beans.properties.id.Id;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
  * @author peace
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DictionaryValueVO implements Serializable, Id<Long> {
@@ -32,10 +30,10 @@ public class DictionaryValueVO implements Serializable, Id<Long> {
     private String code;
     /** 名称 */
     private String name;
-    /** 序号 */
-    private Integer serialNumber;
     /** 备注 */
     private String remark;
+    /** 序号 */
+    private Integer serialNumber;
     /** 创建者主键 */
     private Long creatorId;
     /** 创建时间 */

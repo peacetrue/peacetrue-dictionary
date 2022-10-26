@@ -1,6 +1,8 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
 import com.github.peacetrue.dictionary.DictionaryServiceTestAutoConfiguration;
+import com.github.peacetrue.dictionary.modules.dictionaryvalue.DictionaryValueDelete;
+import com.github.peacetrue.dictionary.modules.dictionaryvalue.DictionaryValueService;
 import com.github.peacetrue.spring.beans.BeanUtils;
 import com.github.peacetrue.spring.data.domain.PageableUtils;
 import lombok.SneakyThrows;
@@ -10,11 +12,17 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.ReactiveTransactionManager;
+import org.springframework.transaction.reactive.TransactionalOperator;
+import org.unitils.reflectionassert.ReflectionAssert;
 import reactor.test.StepVerifier;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+
+import static com.github.peacetrue.dictionary.DictionaryServiceTestAutoConfiguration.DICTIONARY_TYPE;
+import static com.github.peacetrue.dictionary.DictionaryServiceTestAutoConfiguration.DICTIONARY_VALUE;
 
 /**
  * @author peace
@@ -25,15 +33,16 @@ import java.util.Map;
         properties = {"db.schema=dictionary_type_service"}
 )
 @ActiveProfiles("dictionary-service-test")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DictionaryTypeServiceImplTest {
-    public static final EasyRandom EASY_RANDOM = new EasyRandom();
-    public static final DictionaryTypeAdd ADD = EASY_RANDOM.nextObject(DictionaryTypeAdd.class);
-    public static final DictionaryTypeModify MODIFY = EASY_RANDOM.nextObject(DictionaryTypeModify.class);
-    public static DictionaryTypeVO vo;
+//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class DictionaryTypeServiceImplTest {
 
     @Autowired
     private DictionaryTypeServiceImpl service;
+    @Autowired
+    private ReactiveTransactionManager transactionManager;
+    @Autowired
+    private DictionaryValueService dictionaryValueService;
+
 
     @SneakyThrows
     @BeforeAll
@@ -51,14 +60,18 @@ public class DictionaryTypeServiceImplTest {
     @Test
     @Order(10)
     void add() {
-        service.add(ADD)
+        DictionaryTypeAdd add = new EasyRandom().nextObject(DictionaryTypeAdd.class);
+        TransactionalOperator.create(transactionManager)
+                .execute(status -> {
+                    status.setRollbackOnly();
+                    return service.add(add);
+                })
                 .as(StepVerifier::create)
                 .assertNext(data -> {
-                    Map<String, Object> vo = BeanUtils.getPropertyValues(data);
-                    Map<String, Object> add = BeanUtils.getPropertyValues(ADD);
-                    add.remove("dictionaryValues");
-                    Assertions.assertTrue(vo.entrySet().containsAll(add.entrySet()));
-                    DictionaryTypeServiceImplTest.vo = data;
+                    Map<String, Object> voMap = BeanUtils.getPropertyValues(data);
+                    Map<String, Object> addMap = BeanUtils.getPropertyValues(add);
+                    addMap.remove("dictionaryValues");
+                    Assertions.assertTrue(voMap.entrySet().containsAll(addMap.entrySet()));
                 })
                 .verifyComplete();
     }
@@ -66,49 +79,54 @@ public class DictionaryTypeServiceImplTest {
     @Test
     @Order(20)
     void queryForPage() {
-        DictionaryTypeQuery params = BeanUtils.convert(vo, DictionaryTypeQuery.class);
+        DictionaryTypeQuery params = BeanUtils.convert(DICTIONARY_TYPE, DictionaryTypeQuery.class);
         service.queryPage(params, PageableUtils.PAGEABLE_DEFAULT)
                 .as(StepVerifier::create)
-                .assertNext(page -> Assertions.assertEquals(1, page.getTotalElements()))
+                .assertNext(page -> ReflectionAssert.assertReflectionEquals(DICTIONARY_TYPE, page.getContent().get(0)))
                 .verifyComplete();
     }
 
     @Test
     @Order(30)
     void queryForList() {
-        DictionaryTypeQuery params = BeanUtils.convert(vo, DictionaryTypeQuery.class);
-        service.queryList(params, PageableUtils.PAGEABLE_DEFAULT)
+        DictionaryTypeQuery query = BeanUtils.convert(DICTIONARY_TYPE, DictionaryTypeQuery.class);
+        service.queryList(query, PageableUtils.PAGEABLE_DEFAULT)
                 .as(StepVerifier::create)
-                .expectNextCount(1)
+                .assertNext(vo -> ReflectionAssert.assertReflectionEquals(DICTIONARY_TYPE, vo))
                 .verifyComplete();
     }
 
     @Test
     @Order(40)
     void get() {
-        DictionaryTypeGet params = BeanUtils.convert(vo, DictionaryTypeGet.class);
-        service.get(params)
+        service.get(BeanUtils.convert(DICTIONARY_TYPE, DictionaryTypeGet.class))
                 .as(StepVerifier::create)
-                .assertNext(item -> Assertions.assertEquals(vo.getId(), item.getId()))
+                .assertNext(vo -> ReflectionAssert.assertReflectionEquals(DICTIONARY_TYPE, vo))
                 .verifyComplete();
     }
 
     @Test
     @Order(50)
     void modify() {
-        DictionaryTypeModify params = MODIFY;
-        params.setId(vo.getId());
-        service.modify(params)
+        TransactionalOperator.create(transactionManager)
+                .execute(status -> {
+                    status.setRollbackOnly();
+                    return service.modify(BeanUtils.convert(DICTIONARY_TYPE, DictionaryTypeModify.class));
+                })
                 .as(StepVerifier::create)
-                .expectNext(1)
+                .assertNext(count -> Assertions.assertEquals(1, count))
                 .verifyComplete();
     }
 
     @Test
     @Order(60)
     void delete() {
-        DictionaryTypeDelete params = new DictionaryTypeDelete(vo.getId());
-        service.delete(params)
+        TransactionalOperator.create(transactionManager)
+                .execute(status -> {
+                    status.setRollbackOnly();
+                    return dictionaryValueService.delete(new DictionaryValueDelete(DICTIONARY_VALUE.getId()))
+                            .then(service.delete(new DictionaryTypeDelete(DICTIONARY_TYPE.getId())));
+                })
                 .as(StepVerifier::create)
                 .expectNext(1)
                 .verifyComplete();

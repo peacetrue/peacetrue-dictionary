@@ -1,6 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
-import com.github.peacetrue.range.LocalDateTimeRange;
+import com.github.peacetrue.range.LocalDateRange;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,8 +33,8 @@ public class DictionaryValueQuery implements Serializable {
     /** 名称 */
     private String name;
     /** 创建时间 */
-    private LocalDateTimeRange createdTime;
+    private LocalDateRange createdTime;
     /** 最近修改时间 */
-    private LocalDateTimeRange modifiedTime;
+    private LocalDateRange modifiedTime;
 
 }

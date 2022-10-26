@@ -2,7 +2,7 @@ description "数据字典服务接口"
 
 dependencies {
     api "com.github.peacetrue:peacetrue-beans"
-    api "com.github.peacetrue:peacetrue-common" // LocalDateTimeRange
+    api "com.github.peacetrue:peacetrue-common" // LocalDateRange
     api "io.projectreactor:reactor-core"
     api "org.springframework.data:spring-data-commons"
 

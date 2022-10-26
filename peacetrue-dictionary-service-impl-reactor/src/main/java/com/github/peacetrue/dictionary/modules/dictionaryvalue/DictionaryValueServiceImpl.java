@@ -1,13 +1,14 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
 import com.github.peacetrue.dictionary.modules.dictionarytype.*;
+import com.github.peacetrue.lang.ObjectUtils;
 import com.github.peacetrue.operator.OperatorSupplier;
+import com.github.peacetrue.range.LocalDateRange;
 import com.github.peacetrue.range.LocalDateTimeRange;
 import com.github.peacetrue.spring.beans.BeanUtils;
 import com.github.peacetrue.spring.data.relational.core.query.CriteriaUtils;
 import com.github.peacetrue.spring.data.relational.core.query.QueryUtils;
 import com.github.peacetrue.spring.data.relational.core.query.UpdateUtils;
-import com.github.peacetrue.util.ObjectUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-import reactor.util.function.Tuple2;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -45,21 +45,6 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
     private OperatorSupplier operatorSupplier;
     private ApplicationEventPublisher eventPublisher;
     private DictionaryTypeService dictionaryTypeService;
-
-    private static Criteria buildCriteria(DictionaryValueQuery params) {
-        LocalDateTimeRange createdTime = ObjectUtils.invokeSafely(params.getCreatedTime(), LocalDateTimeRange.DEFAULT, range -> range.truncatedToDays());
-        LocalDateTimeRange modifiedTime = ObjectUtils.invokeSafely(params.getModifiedTime(), LocalDateTimeRange.DEFAULT, range -> range.truncatedToDays());
-        return CriteriaUtils.and(
-                CriteriaUtils.nullableCriteria(CriteriaUtils.smartIn("id"), params::getId),
-                CriteriaUtils.nullableCriteria(Criteria.where("dictionaryTypeId")::is, params::getDictionaryTypeId),
-                CriteriaUtils.nullableCriteria(Criteria.where("code")::like, value -> "%" + value + "%", params::getCode),
-                CriteriaUtils.nullableCriteria(Criteria.where("name")::like, value -> "%" + value + "%", params::getName),
-                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::greaterThanOrEquals, createdTime::getLowerBound),
-                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::lessThan, createdTime::getUpperBound),
-                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::greaterThanOrEquals, modifiedTime::getLowerBound),
-                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::lessThan, modifiedTime::getUpperBound)
-        );
-    }
 
     @Override
     @Transactional
@@ -97,6 +82,7 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
     }
 
     // 行不通的反例
+
     private Mono<Integer> getNextSerialNumber0(DictionaryValue entity) {
         // BadSqlGrammarException: executeMany; bad SQL grammar [SELECT dictionary_value.max(serial_number) FROM dictionary_value WHERE dictionary_value.dictionary_type_id = $1 LIMIT 2]; nested exception is io.r2dbc.spi.R2dbcBadGrammarException: [90079] [90079] Schema "dictionary_value" not found; SQL statement:
         // SELECT dictionary_value.max(serial_number) FROM dictionary_value WHERE dictionary_value.dictionary_type_id = $1 LIMIT 2 [90079-212]))
@@ -131,17 +117,31 @@ public class DictionaryValueServiceImpl implements DictionaryValueService {
         return Mono.justOrEmpty(values)
                 .flatMapMany(Flux::fromIterable)
                 .index()
-                .doOnNext(indexDictionary -> {
+                .flatMap(indexDictionary -> {
                     DictionaryValueAddInner dictionary = BeanUtils.convert(indexDictionary.getT2(), DictionaryValueAddInner.class);
                     dictionary.setDictionaryTypeId(type.getId());
                     dictionary.setDictionaryTypeCode(type.getCode());
                     dictionary.setSerialNumber(indexDictionary.getT1().intValue() + 1);
+                    return this.add(dictionary);
                 })
-                .map(Tuple2::getT2)
-                .flatMap(this::add)
                 .collectList()
                 .doOnNext(type::setDictionaryValues)
                 ;
+    }
+
+    private static Criteria buildCriteria(DictionaryValueQuery params) {
+        LocalDateTimeRange createdTime = ObjectUtils.invokeSafely(params.getCreatedTime(), LocalDateTimeRange.DEFAULT, LocalDateRange::toLocalDateTimeRange);
+        LocalDateTimeRange modifiedTime = ObjectUtils.invokeSafely(params.getModifiedTime(), LocalDateTimeRange.DEFAULT, LocalDateRange::toLocalDateTimeRange);
+        return CriteriaUtils.and(
+                CriteriaUtils.nullableCriteria(CriteriaUtils.smartIn("id"), params::getId),
+                CriteriaUtils.nullableCriteria(Criteria.where("dictionaryTypeId")::is, params::getDictionaryTypeId),
+                CriteriaUtils.nullableCriteria(Criteria.where("code")::like, value -> "%" + value + "%", params::getCode),
+                CriteriaUtils.nullableCriteria(Criteria.where("name")::like, value -> "%" + value + "%", params::getName),
+                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::greaterThanOrEquals, createdTime::getLowerBound),
+                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::lessThan, createdTime::getUpperBound),
+                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::greaterThanOrEquals, modifiedTime::getLowerBound),
+                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::lessThan, modifiedTime::getUpperBound)
+        );
     }
 
     @Override

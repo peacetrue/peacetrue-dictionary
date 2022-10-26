@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 
 /**
  * @author peace
@@ -25,7 +26,7 @@ class DictionaryTypeControllerTest {
     @Order(10)
     void add() {
         this.client.post().uri("/dictionary-types")
-                .bodyValue(new DictionaryTypeAdd())
+                .body(BodyInserters.fromObject(new DictionaryTypeAdd()))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -70,7 +71,7 @@ class DictionaryTypeControllerTest {
     void modify() {
         this.client.put()
                 .uri("/dictionary-types")
-                .bodyValue(new DictionaryTypeModify())
+                .body(BodyInserters.fromObject(new DictionaryTypeModify()))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()

@@ -1,13 +1,14 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
 import com.github.peacetrue.operator.OperatorSupplier;
+import com.github.peacetrue.range.LocalDateRange;
 import com.github.peacetrue.range.LocalDateTimeRange;
 import com.github.peacetrue.spring.beans.BeanUtils;
 import com.github.peacetrue.spring.data.domain.SortUtils;
 import com.github.peacetrue.spring.data.relational.core.query.CriteriaUtils;
 import com.github.peacetrue.spring.data.relational.core.query.QueryUtils;
 import com.github.peacetrue.spring.data.relational.core.query.UpdateUtils;
-import com.github.peacetrue.util.ObjectUtils;
+import com.github.peacetrue.lang.ObjectUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -42,26 +43,6 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
     private OperatorSupplier operatorSupplier;
     private ApplicationEventPublisher eventPublisher;
 
-    /**
-     * 构建查询条件。
-     *
-     * @param params 查询参数
-     * @return 查询条件
-     */
-    private static Criteria buildCriteria(DictionaryTypeQuery params) {
-        LocalDateTimeRange createdTime = ObjectUtils.invokeSafely(params.getCreatedTime(), LocalDateTimeRange.DEFAULT, range -> range.truncatedToDays());
-        LocalDateTimeRange modifiedTime = ObjectUtils.invokeSafely(params.getModifiedTime(), LocalDateTimeRange.DEFAULT, range -> range.truncatedToDays());
-        return CriteriaUtils.and(
-                CriteriaUtils.nullableCriteria(CriteriaUtils.smartIn("id"), params::getId),
-                CriteriaUtils.nullableCriteria(Criteria.where("code")::like, value -> "%" + value + "%", params::getCode),
-                CriteriaUtils.nullableCriteria(Criteria.where("name")::like, value -> "%" + value + "%", params::getName),
-                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::greaterThanOrEquals, createdTime::getLowerBound),
-                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::lessThan, createdTime::getUpperBound),
-                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::greaterThanOrEquals, modifiedTime::getLowerBound),
-                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::lessThan, modifiedTime::getUpperBound)
-        );
-    }
-
     @Override
     @Transactional
     public Mono<DictionaryTypeVO> add(DictionaryTypeAdd params) {
@@ -77,6 +58,26 @@ public class DictionaryTypeServiceImpl implements DictionaryTypeService {
                 // 发布一个后置新增事件，新增字典值项集合，避免依赖 DictionaryValueService
                 .doOnNext(vo -> eventPublisher.publishEvent(new PayloadApplicationEvent<>(vo, params)))
                 ;
+    }
+
+    /**
+     * 构建查询条件。
+     *
+     * @param params 查询参数
+     * @return 查询条件
+     */
+    private static Criteria buildCriteria(DictionaryTypeQuery params) {
+        LocalDateTimeRange createdTime = ObjectUtils.invokeSafely(params.getCreatedTime(), LocalDateTimeRange.DEFAULT, LocalDateRange::toLocalDateTimeRange);
+        LocalDateTimeRange modifiedTime = ObjectUtils.invokeSafely(params.getModifiedTime(), LocalDateTimeRange.DEFAULT, LocalDateRange::toLocalDateTimeRange);
+        return CriteriaUtils.and(
+                CriteriaUtils.nullableCriteria(CriteriaUtils.smartIn("id"), params::getId),
+                CriteriaUtils.nullableCriteria(Criteria.where("code")::like, value -> "%" + value + "%", params::getCode),
+                CriteriaUtils.nullableCriteria(Criteria.where("name")::like, value -> "%" + value + "%", params::getName),
+                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::greaterThanOrEquals, createdTime::getLowerBound),
+                CriteriaUtils.nullableCriteria(Criteria.where("createdTime")::lessThan, createdTime::getUpperBound),
+                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::greaterThanOrEquals, modifiedTime::getLowerBound),
+                CriteriaUtils.nullableCriteria(Criteria.where("modifiedTime")::lessThan, modifiedTime::getUpperBound)
+        );
     }
 
     @Override
