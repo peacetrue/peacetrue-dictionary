@@ -2,11 +2,11 @@
 
 git clone -b "1.2.1" https://github.com/peacetrue/peacetrue-application-frontend
 cd peacetrue-application-frontend/peacetrue-application-react-admin || exit
-pnpm install @peace/dictionary-react-admin@0.0.0-1
+pnpm install dictionary-react-admin@0.0.0-1
 
 # 设置数据字典 Resource
 tee src/modules/index.tsx <<EOF
-import {DictionaryTypeResource, DictionaryValueResource} from "@peace/dictionary-react-admin";
+import {DictionaryTypeResource, DictionaryValueResource} from "dictionary-react-admin";
 export const Resources = [DictionaryTypeResource, DictionaryValueResource]
 EOF
 
