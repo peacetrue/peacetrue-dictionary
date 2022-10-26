@@ -14,7 +14,7 @@ EOF
 tee src/i18n/index.ts <<EOF
 import {mergeTranslations} from "react-admin";
 import {Messages} from "./Messages_zh";
-import {DictionaryTypeMessages, DictionaryValueMessages} from "@peace/dictionary-react-admin";
+import {DictionaryTypeMessages, DictionaryValueMessages} from "dictionary-react-admin";
 
 export const getMessages = (locale: string) => mergeTranslations(Messages, DictionaryTypeMessages, DictionaryValueMessages);
 EOF
