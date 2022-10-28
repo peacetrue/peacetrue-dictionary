@@ -5,6 +5,7 @@ import {DictionaryValueList} from './List';
 import {DictionaryValueCreate} from './Create';
 import {DictionaryValueEdit} from './Edit';
 import {DictionaryValueShow} from './Show';
+import {DictionaryValueMessages} from "./Messages"
 
 export const DictionaryValue = {
   list: DictionaryValueList,
@@ -12,7 +13,9 @@ export const DictionaryValue = {
   edit: DictionaryValueEdit,
   show: DictionaryValueShow
 };
+//@formatter:off
 // react-jsx-dev-runtime.development.js:87 Warning: Each child in a list should have a unique "key" prop. Check the render method of `App`. See https://reactjs.org/link/warning-keys for more information.
 export const DictionaryValueResource = <Resource key="dictionary-values" name="dictionary-values" {...DictionaryValue} />;
 export default DictionaryValueResource;
-export * from "./Messages"
+export const resource = DictionaryValueResource
+export const messages = DictionaryValueMessages

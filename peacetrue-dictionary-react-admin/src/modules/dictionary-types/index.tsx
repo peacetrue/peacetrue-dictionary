@@ -5,6 +5,7 @@ import {DictionaryTypeList} from './List';
 import {DictionaryTypeCreate} from './Create';
 import {DictionaryTypeEdit} from './Edit';
 import {DictionaryTypeShow} from './Show';
+import {DictionaryTypeMessages} from "./Messages"
 
 export const DictionaryType = {
   list: DictionaryTypeList,
@@ -14,4 +15,5 @@ export const DictionaryType = {
 };
 export const DictionaryTypeResource = <Resource key="dictionary-types" name="dictionary-types" {...DictionaryType} />;
 export default DictionaryTypeResource;
-export * from "./Messages"
+export const messages = DictionaryTypeMessages;
+export const resource = DictionaryTypeResource;

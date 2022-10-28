@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(":peacetrue-dictionary-service-impl")
+    implementation project(":peacetrue-dictionary-service-controller")
+}
+
