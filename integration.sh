@@ -4,7 +4,8 @@ workingDir="\$workingDir"
 backend="peacetrue-application-webmvc"
 frontend="peacetrue-application-react-admin"
 module="peacetrue-dictionary"
-modules="dictionary-types,dictionary-values"
+type="dictionary-types"
+value="dictionary-values"
 
 tee "integration-init.sh" <<EOF
 #!/bin/bash
@@ -17,9 +18,9 @@ echo "includeFlat('$frontend')" >> 'settings.gradle'
 ln -s "$workingDir/$module/dictionary.gradle" "$workingDir/$backend/extend/dictionary.gradle"
 
 # 初始化前端
-lndir "$workingDir/$module/${module}-react-admin/src/modules/dictionary-types" "$workingDir/$frontend/src/modules/dictionary-types"
-lndir "$workingDir/$module/${module}-react-admin/src/modules/dictionary-values" "$workingDir/$frontend/src/modules/dictionary-values"
-printf "REACT_APP_BASE_URL=http://localhost:8080 \nREACT_APP_MODULES=${modules}" > "$workingDir/$frontend/.env.local"
+lndir "$workingDir/$module/${module}-react-admin/src/modules/$type" "$workingDir/$frontend/src/modules/$type"
+lndir "$workingDir/$module/${module}-react-admin/src/modules/$value" "$workingDir/$frontend/src/modules/$value"
+printf "REACT_APP_BASE_URL=http://localhost:8080 \nREACT_APP_MODULES=$type,$value" > "$workingDir/$frontend/.env.local"
 EOF
 
 
@@ -34,7 +35,7 @@ sed -i '' "s|includeFlat('$frontend')||" 'settings.gradle'
 rm -rf "$workingDir/$backend/extend/dictionary.gradle"
 
 #销毁前端
-rm -rf "$workingDir/$frontend/src/modules/dictionary-types"
-rm -rf "$workingDir/$frontend/src/modules/dictionary-values"
+rm -rf "$workingDir/$frontend/src/modules/$type"
+rm -rf "$workingDir/$frontend/src/modules/$value"
 echo "" > "$workingDir/$frontend/.env.local"
 EOF
