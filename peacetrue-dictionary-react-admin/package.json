@@ -1,6 +1,6 @@
 {
-  "name": "dictionary-react-admin",
-  "version": "0.0.0-1",
+  "name": "ra-dictionary",
+  "version": "0.0.0-3",
   "description": "数据字典",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
