@@ -1,3 +1,4 @@
+// 用于集成应用外壳开发
 dependencies {
     implementation project(":peacetrue-dictionary-service-impl")
     implementation project(":peacetrue-dictionary-service-controller")

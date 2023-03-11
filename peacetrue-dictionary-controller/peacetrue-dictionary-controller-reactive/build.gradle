@@ -1,0 +1,12 @@
+description "数据字典控制器"
+
+dependencies {
+    api project(":peacetrue-dictionary-api:peacetrue-dictionary-api-reactive")
+    implementation "org.springframework.boot:spring-boot-starter-webflux"
+    implementation "org.springframework.data:spring-data-commons"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.boot:spring-boot-starter-webflux"
+    testImplementation "org.springframework.data:spring-data-commons"
+    testImplementation "io.projectreactor:reactor-test"
+}

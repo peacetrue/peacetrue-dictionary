@@ -12,44 +12,29 @@ pluginManagement {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
+        gradlePluginPortal()
     }
 }
 
 rootProject.name = "peacetrue-dictionary"
-include("peacetrue-dictionary-service-api-reactor")
-include("peacetrue-dictionary-service-impl-reactor")
-include("peacetrue-dictionary-controller-reactor")
-
-include("peacetrue-dictionary-service-api")
-include("peacetrue-dictionary-service-impl")
+include("peacetrue-dictionary-api")
+include("peacetrue-dictionary-api:peacetrue-dictionary-api-imperative")
+include("peacetrue-dictionary-api:peacetrue-dictionary-api-reactive")
+include("peacetrue-dictionary-impl")
+include("peacetrue-dictionary-impl:peacetrue-dictionary-impl-imperative")
+include("peacetrue-dictionary-impl:peacetrue-dictionary-impl-reactive")
 include("peacetrue-dictionary-controller")
+include("peacetrue-dictionary-controller:peacetrue-dictionary-controller-imperative")
+include("peacetrue-dictionary-controller:peacetrue-dictionary-controller-reactive")
+
+//include("peacetrue-dictionary-api")
+//include("peacetrue-dictionary-service-api-reactor")
+//include("peacetrue-dictionary-service-impl-reactor")
+//include("peacetrue-dictionary-controller-reactor")
+//
+//include("peacetrue-dictionary-service-api")
+//include("peacetrue-dictionary-service-impl")
+//include("peacetrue-dictionary-controller")
 //include("peacetrue-dictionary-app-mono")
 //include("peacetrue-dictionary-app-micro")
 //include("peacetrue-dictionary-client")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

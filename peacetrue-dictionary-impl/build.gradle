@@ -1,0 +1,16 @@
+description "数据字典服务实现"
+
+dependencies {
+    api project(":peacetrue-dictionary-api")
+    compileOnly "javax.persistence:javax.persistence-api" //DictionaryValueAddInner
+    compileOnly "javax.validation:validation-api" //DictionaryValueAddInner
+    compileOnly "com.github.peacetrue:peacetrue-validation"
+}
+
+// 生成实体模型
+//    annotationProcessor "org.hibernate:hibernate-jpamodelgen"
+//    implementation "org.hibernate:hibernate-jpamodelgen"
+//tasks.withType(JavaCompile) {
+//    options.annotationProcessorGeneratedSourcesDirectory = file("src/main/java")
+//}
+
