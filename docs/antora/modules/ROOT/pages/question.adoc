@@ -25,11 +25,11 @@ reactor 分支中使用 Spring WebFlux 技术栈，对应类库版本 2.x。
 
 [source%nowrap,bash]
 ----
-cd $workingDir/peacetrue-application-react-admin/src/modules
-lndir $workingDir/peacetrue-dictionary/peacetrue-dictionary-react-admin/src/modules/dictionary-types dictionary-types
-lndir $workingDir/peacetrue-dictionary/peacetrue-dictionary-react-admin/src/modules/dictionary-values dictionary-values
+cd $workingDir/peacetrue-application-reactadmin/src/modules
+lndir $workingDir/peacetrue-dictionary/peacetrue-dictionary-reactadmin/src/modules/dictionary-types dictionary-types
+lndir $workingDir/peacetrue-dictionary/peacetrue-dictionary-reactadmin/src/modules/dictionary-values dictionary-values
 
-cd $workingDir/peacetrue-application-react-admin/src
+cd $workingDir/peacetrue-application-reactadmin/src
 lndir $workingDir/peacetrue-react-admin/src peacetrue-react-admin
 ----
 

@@ -2,7 +2,7 @@
 
 workingDir="\$workingDir"
 backend="peacetrue-application-webmvc"
-frontend="peacetrue-application-react-admin"
+frontend="peacetrue-application-reactadmin"
 module="peacetrue-dictionary"
 type="dictionary-types"
 value="dictionary-values"

@@ -10,5 +10,5 @@ peacetrue-dictionary-controller-reactive::
 数据字典控制器。
 peacetrue-dictionary-client::
 数据字典客户端。
-peacetrue-dictionary-react-admin::
+peacetrue-dictionary-reactadmin::
 集成前端 React Admin 模块。

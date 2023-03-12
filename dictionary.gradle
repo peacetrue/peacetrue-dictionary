@@ -1,6 +1,6 @@
 // 用于集成应用外壳开发
 dependencies {
-    implementation project(":peacetrue-dictionary-service-impl")
-    implementation project(":peacetrue-dictionary-service-controller")
+    implementation project(":peacetrue-dictionary-impl:peacetrue-dictionary-impl-imperative")
+    implementation project(":peacetrue-dictionary-controller:peacetrue-dictionary-controller-imperative")
 }
 

@@ -38,3 +38,5 @@ include("peacetrue-dictionary-controller:peacetrue-dictionary-controller-reactiv
 //include("peacetrue-dictionary-app-mono")
 //include("peacetrue-dictionary-app-micro")
 //include("peacetrue-dictionary-client")
+
+
