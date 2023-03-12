@@ -1,7 +1,0 @@
-description "数据字典客户端"
-
-dependencies {
-    api project(":peacetrue-dictionary-api:peacetrue-dictionary-api-reactive")
-    compileOnly "org.springframework.data:spring-data-commons"
-    compileOnly "com.playtika.reactivefeign:feign-reactor-spring-configuration"
-}

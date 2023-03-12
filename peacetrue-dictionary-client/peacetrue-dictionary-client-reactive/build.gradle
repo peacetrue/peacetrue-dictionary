@@ -1,0 +1,20 @@
+description "数据字典客户端"
+
+dependencies {
+    api project(":peacetrue-dictionary-api:peacetrue-dictionary-api-reactive")
+    implementation "org.springframework.data:spring-data-commons"
+    implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
+
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "io.projectreactor:reactor-test"
+    testImplementation "org.springframework.boot:spring-boot-starter-json" //SpringEncoder
+    testImplementation project(":peacetrue-dictionary-controller:peacetrue-dictionary-controller-reactive")
+    testImplementation "javax.validation:validation-api"
+    testImplementation "com.github.peacetrue:peacetrue-validation"
+    testImplementation "org.springframework.boot:spring-boot-starter-webflux"
+    testImplementation 'com.playtika.reactivefeign:feign-reactor-core:3.2.6'
+    testImplementation 'com.playtika.reactivefeign:feign-reactor-webclient:3.2.6'
+
+
+}

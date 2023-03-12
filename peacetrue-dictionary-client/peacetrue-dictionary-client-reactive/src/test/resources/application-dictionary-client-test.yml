@@ -1,0 +1,3 @@
+server.port: 8081
+peacetrue.server.url: http://localhost:${server.port}
+spring.main.allow-bean-definition-overriding: true

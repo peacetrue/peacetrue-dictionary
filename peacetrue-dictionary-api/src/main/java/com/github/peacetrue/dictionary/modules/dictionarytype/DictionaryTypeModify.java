@@ -20,7 +20,6 @@ import java.io.Serializable;
 @MultiNotNull(properties = {"name", "remark"})
 public class DictionaryTypeModify implements Serializable {
 
-
     /** 主键 */
     @NotNull
     @Min(1)

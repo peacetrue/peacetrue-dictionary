@@ -1,0 +1,15 @@
+description "数据字典客户端"
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies/2021.0.6
+    implementation platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.6")
+    api project(":peacetrue-dictionary-api:peacetrue-dictionary-api-imperative")
+    implementation "org.springframework.data:spring-data-commons"
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.boot:spring-boot-starter-json" //SpringEncoder
+    testImplementation project(":peacetrue-dictionary-controller:peacetrue-dictionary-controller-imperative")
+    testImplementation "javax.validation:validation-api"
+    testImplementation "com.github.peacetrue:peacetrue-validation"
+}

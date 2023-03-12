@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # 销毁项目配置
-sed -i  "s|includeFlat('peacetrue-application-webmvc')||" 'settings.gradle'
-sed -i  "s|includeFlat('peacetrue-application-reactadmin')||" 'settings.gradle'
+sed -i  "/includeFlat/d" 'settings.gradle'
 
 #销毁后端
 rm -rf "$workingDir/peacetrue-application-webmvc/extend/dictionary.gradle"
