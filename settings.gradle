@@ -28,9 +28,9 @@ include("peacetrue-dictionary-controller:peacetrue-dictionary-controller-imperat
 include("peacetrue-dictionary-controller:peacetrue-dictionary-controller-reactive")
 
 //include("peacetrue-dictionary-api")
-//include("peacetrue-dictionary-service-api-reactor")
-//include("peacetrue-dictionary-service-impl-reactor")
-//include("peacetrue-dictionary-controller-reactor")
+//include("peacetrue-dictionary-service-api-reactive")
+//include("peacetrue-dictionary-service-impl-reactive")
+//include("peacetrue-dictionary-controller-reactive")
 //
 //include("peacetrue-dictionary-service-api")
 //include("peacetrue-dictionary-service-impl")

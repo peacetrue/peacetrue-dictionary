@@ -28,8 +28,8 @@ tee "integration-destroy.sh" <<EOF
 #!/bin/bash
 
 # 销毁项目配置
-sed -i '' "s|includeFlat('$backend')||" 'settings.gradle'
-sed -i '' "s|includeFlat('$frontend')||" 'settings.gradle'
+sed -i "s|includeFlat('$backend')||" 'settings.gradle'
+sed -i "s|includeFlat('$frontend')||" 'settings.gradle'
 
 #销毁后端
 rm -rf "$workingDir/$backend/extend/dictionary.gradle"

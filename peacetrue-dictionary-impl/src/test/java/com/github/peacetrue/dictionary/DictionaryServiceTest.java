@@ -10,10 +10,20 @@ import java.time.LocalDateTime;
  */
 public class DictionaryServiceTest {
     public static final LocalDateTime LOCAL_DATE_TIME = LocalDateTime.parse("2022-10-25T00:00:00");
-    public static final DictionaryTypeVO DICTIONARY_TYPE = new DictionaryTypeVO(
-            1L, "sex", "性别", "", 0L, LOCAL_DATE_TIME, 0L, LOCAL_DATE_TIME, null
-    );
-    public static final DictionaryValueVO DICTIONARY_VALUE = new DictionaryValueVO(
-            1L, DICTIONARY_TYPE.getId(), DICTIONARY_TYPE.getCode(), "man", "男", "", 1, 0L, LOCAL_DATE_TIME, 0L, LOCAL_DATE_TIME
-    );
+    public static final DictionaryTypeVO DICTIONARY_TYPE = new DictionaryTypeVO()
+            .setId(1L)
+            .setCode("sex").setName("性别").setRemark("")
+            .setCreatorId(0L)
+            .setCreatedTime(LOCAL_DATE_TIME)
+            .setModifierId(0L)
+            .setModifiedTime(LOCAL_DATE_TIME);
+    public static final DictionaryValueVO DICTIONARY_VALUE = new DictionaryValueVO()
+            .setId(1L).setDictionaryTypeId(DICTIONARY_TYPE.getId())
+            .setDictionaryTypeCode(DICTIONARY_TYPE.getCode())
+            .setCode("man").setName("男").setRemark("")
+            .setSerialNumber(1)
+            .setCreatorId(0L)
+            .setCreatedTime(LOCAL_DATE_TIME)
+            .setModifierId(0L)
+            .setModifiedTime(LOCAL_DATE_TIME);
 }

@@ -30,9 +30,9 @@ image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codec
 
 [source%nowrap,gradle,subs="attributes"]
 ----
-implementation "com.github.peacetrue.dictionary:{app-name}-service-api-reactor:{app-version}"
-implementation "com.github.peacetrue.dictionary:{app-name}-service-impl-reactor:{app-version}"
-implementation "com.github.peacetrue.dictionary:{app-name}-controller-reactor:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-service-api-reactive:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-service-impl-reactive:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-controller-reactive:{app-version}"
 ----
 
 // 最新版本可从 https://search.maven.org/search?q=com.github.peacetrue.dictionary[maven^] 中查看。

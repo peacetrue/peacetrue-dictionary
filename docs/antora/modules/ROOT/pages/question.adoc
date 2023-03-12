@@ -9,7 +9,7 @@
 
 通过模块区分::
 使用 _name_-service-api 表示 Spring MVC 技术栈；
-使用 _name_-service-api-reactor 表示 Spring WebFlux 技术栈。
+使用 _name_-service-api-reactive 表示 Spring WebFlux 技术栈。
 通过版本分支区分::
 模块都是 _name_-service-api，
 mvc 分支中使用 Spring MVC 技术栈，对应类库版本 1.x；
