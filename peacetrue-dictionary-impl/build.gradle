@@ -5,6 +5,7 @@ dependencies {
     compileOnly "javax.persistence:javax.persistence-api" //DictionaryValueAddInner
     compileOnly "javax.validation:validation-api" //DictionaryValueAddInner
     compileOnly "com.github.peacetrue:peacetrue-validation"
+    compileOnly "org.springframework.data:spring-data-commons" //@org.springframework.data.annotation.Id
 }
 
 // 生成实体模型

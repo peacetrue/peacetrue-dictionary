@@ -2,7 +2,9 @@ package com.github.peacetrue.dictionary.modules.dictionarytype;
 
 import com.github.peacetrue.beans.createmodify.CreateModify;
 import com.github.peacetrue.beans.properties.id.IdCapable;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,6 +24,7 @@ public class DictionaryType implements Serializable, IdCapable<Long>, CreateModi
     /** 主键 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @org.springframework.data.annotation.Id
     private Long id;
     /** 编码 */
     @Column(nullable = false, length = 32)

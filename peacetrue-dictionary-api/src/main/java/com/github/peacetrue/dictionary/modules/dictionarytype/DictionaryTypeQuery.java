@@ -1,10 +1,8 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
 import com.github.peacetrue.range.LocalDateRange;
-import lombok.AllArgsConstructor;
-import lombok.experimental.Accessors;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -16,10 +14,8 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-
 public class DictionaryTypeQuery implements Serializable {
 
-    
 
     /** 默认占位值，解决 null 引用问题；此值不能被篡改 */
     public static final DictionaryTypeQuery DEFAULT = new DictionaryTypeQuery();

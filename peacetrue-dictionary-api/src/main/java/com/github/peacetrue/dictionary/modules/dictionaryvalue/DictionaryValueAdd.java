@@ -1,9 +1,7 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
-import lombok.AllArgsConstructor;
-import lombok.experimental.Accessors;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

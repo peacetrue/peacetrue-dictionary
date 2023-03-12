@@ -4,6 +4,7 @@ package com.github.peacetrue.dictionary;
 //import com.github.peacetrue.spring.formatter.date.AutomaticLocalDateFormatter;
 //import com.github.peacetrue.spring.formatter.date.AutomaticLocalDateTimeFormatter;
 //import com.github.peacetrue.spring.formatter.date.AutomaticTimeFormatter;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

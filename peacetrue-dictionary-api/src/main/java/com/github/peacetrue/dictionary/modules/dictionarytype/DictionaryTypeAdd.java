@@ -17,7 +17,6 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-
 public class DictionaryTypeAdd implements Serializable {
 
     /** 编码 */

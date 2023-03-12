@@ -24,6 +24,24 @@ public class H2Test {
         Files.deleteIfExists(Paths.get("test.mv.db"));
     }
 
+    @SneakyThrows
+    static String tables(Connection connection) {
+        StringBuilder buffer = new StringBuilder();
+        Statement statement = connection.createStatement();
+        statement = connection.createStatement();
+        // SCHEMATA
+        statement.execute("SELECT * FROM INFORMATION_SCHEMA.TABLES");
+        ResultSet resultSet = statement.getResultSet();
+        int columnCount = resultSet.getMetaData().getColumnCount();
+        while (resultSet.next()) {
+            for (int i = 1; i <= columnCount; i++) {
+                buffer.append(resultSet.getObject(i)).append("|");
+            }
+            buffer.append("\n");
+        }
+        return buffer.toString();
+    }
+
     /** 内存数据库是基于连接的，连接不关闭一直在，关闭连接数据库消失 */
     @SneakyThrows
     @Test
@@ -80,23 +98,5 @@ public class H2Test {
         System.out.println(tables(connection));
         connection = DriverManager.getConnection("jdbc:h2:file:./test2");
         System.out.println(tables(connection));
-    }
-
-    @SneakyThrows
-    static String tables(Connection connection) {
-        StringBuilder buffer = new StringBuilder();
-        Statement statement = connection.createStatement();
-        statement = connection.createStatement();
-        // SCHEMATA
-        statement.execute("SELECT * FROM INFORMATION_SCHEMA.TABLES");
-        ResultSet resultSet = statement.getResultSet();
-        int columnCount = resultSet.getMetaData().getColumnCount();
-        while (resultSet.next()) {
-            for (int i = 1; i <= columnCount; i++) {
-                buffer.append(resultSet.getObject(i)).append("|");
-            }
-            buffer.append("\n");
-        }
-        return buffer.toString();
     }
 }

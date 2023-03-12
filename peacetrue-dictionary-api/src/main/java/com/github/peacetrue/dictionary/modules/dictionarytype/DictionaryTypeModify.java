@@ -1,10 +1,8 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype;
 
 import com.github.peacetrue.validation.constraints.multinotnull.MultiNotNull;
-import lombok.AllArgsConstructor;
-import lombok.experimental.Accessors;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -19,11 +17,9 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-
 @MultiNotNull(properties = {"name", "remark"})
 public class DictionaryTypeModify implements Serializable {
 
-    
 
     /** 主键 */
     @NotNull

@@ -16,8 +16,7 @@ import java.util.List;
  * @author peace
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Accessors(chain = true)
 public class DictionaryTypeVO implements Serializable {
 
     /** 主键 */

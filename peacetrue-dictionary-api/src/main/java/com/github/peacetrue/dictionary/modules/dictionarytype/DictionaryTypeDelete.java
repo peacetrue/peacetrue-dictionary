@@ -13,8 +13,7 @@ import java.io.Serializable;
  * @author peace
  */
 @Data
-@Accessors(chain = true)
-public class DictionaryTypeDelete implements Serializable {
+@Accessors(chain = true)public class DictionaryTypeDelete implements Serializable {
 
     @NotNull
     @Min(1)

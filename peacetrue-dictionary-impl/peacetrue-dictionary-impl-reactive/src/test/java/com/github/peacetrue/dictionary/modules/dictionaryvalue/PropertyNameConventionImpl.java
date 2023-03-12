@@ -2,7 +2,6 @@ package com.github.peacetrue.dictionary.modules.dictionaryvalue;
 
 /**
  * @author peace
- * 
  **/
 public class PropertyNameConventionImpl implements PropertyNameConvention {
 

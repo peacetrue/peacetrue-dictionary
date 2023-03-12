@@ -5,7 +5,6 @@ import reactor.core.publisher.Mono;
 
 /**
  * @author peace
- *
  **/
 public interface R2dbcRepository {
 
