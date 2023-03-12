@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_VALUE_PATH;
+
 /**
  * 字典项值控制器。
  *
@@ -18,7 +20,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/dictionary-values")
+@RequestMapping(value = DICTIONARY_VALUE_PATH)
 @Setter(onMethod = @__(@Autowired))
 public class DictionaryValueController {
 

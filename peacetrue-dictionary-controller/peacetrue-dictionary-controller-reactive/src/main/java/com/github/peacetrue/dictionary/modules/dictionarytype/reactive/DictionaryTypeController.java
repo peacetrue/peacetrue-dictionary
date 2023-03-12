@@ -1,8 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype.reactive;
 
 import com.github.peacetrue.dictionary.modules.dictionarytype.*;
-import com.github.peacetrue.dictionary.modules.dictionarytype.reactive.DictionaryTypeService;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_TYPE_PATH;
+
 /**
  * 字典类型控制器。
  *
@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/dictionary-types")
+@RequestMapping(value = DICTIONARY_TYPE_PATH)
 @Setter(onMethod = @__(@Autowired))
 public class DictionaryTypeController {
 

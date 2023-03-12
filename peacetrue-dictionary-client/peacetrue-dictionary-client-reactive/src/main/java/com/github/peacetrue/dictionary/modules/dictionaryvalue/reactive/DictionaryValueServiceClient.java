@@ -9,6 +9,8 @@ import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_VALUE_PATH;
+
 /**
  * 字典项值客户端。
  *
@@ -18,18 +20,18 @@ import reactor.core.publisher.Mono;
 public interface DictionaryValueServiceClient extends DictionaryValueService {
 
     @Override
-    @PostMapping(value = "/dictionary-values")
+    @PostMapping(value = DICTIONARY_VALUE_PATH)
     Mono<DictionaryValueVO> add(DictionaryValueAdd params);
 
     @Override
-    @GetMapping(value = "/dictionary-values", params = "page")
+    @GetMapping(value = DICTIONARY_VALUE_PATH)
     Mono<Page<DictionaryValueVO>> queryPage(@SpringQueryMap DictionaryValueQuery params, Pageable pageable, @SpringQueryMap String... projection);
 
     @Override
-    @GetMapping(value = "/dictionary-values", params = "sort")
+    @GetMapping(value = DICTIONARY_VALUE_PATH, params = "rtn=list")
     Flux<DictionaryValueVO> queryList(@SpringQueryMap DictionaryValueQuery params, Pageable pageable, @SpringQueryMap String... projection);
 
-    @GetMapping(value = "/dictionary-values/{id}")
+    @GetMapping(value = DICTIONARY_VALUE_PATH + "/{id}")
     Mono<DictionaryValueVO> get(@PathVariable("id") Long id, @SpringQueryMap String... projection);
 
     @Override
@@ -38,10 +40,10 @@ public interface DictionaryValueServiceClient extends DictionaryValueService {
     }
 
     @Override
-    @PutMapping(value = "/dictionary-values")
+    @PutMapping(value = DICTIONARY_VALUE_PATH)
     Mono<Integer> modify(DictionaryValueModify params);
 
-    @DeleteMapping(value = "/dictionary-values/{id}")
+    @DeleteMapping(value = DICTIONARY_VALUE_PATH + "/{id}")
     Mono<Integer> delete(@PathVariable("id") Long id);
 
     @Override

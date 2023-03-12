@@ -11,6 +11,8 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Nullable;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_TYPE_PATH;
+
 /**
  * 字典类型客户端。
  *
@@ -20,15 +22,15 @@ import javax.annotation.Nullable;
 public interface DictionaryTypeServiceClient extends DictionaryTypeService {
 
     @Override
-    @PostMapping(value = "/dictionary-types")
+    @PostMapping(value = DICTIONARY_TYPE_PATH)
     Mono<DictionaryTypeVO> add(DictionaryTypeAdd params);
 
     @Override
-    @GetMapping(value = "/dictionary-types", params = "page")
+    @GetMapping(value = DICTIONARY_TYPE_PATH, params = "page")
     Mono<Page<DictionaryTypeVO>> queryPage(@Nullable @SpringQueryMap DictionaryTypeQuery params, @Nullable Pageable pageable, @SpringQueryMap String... projection);
 
     @Override
-    @GetMapping(value = "/dictionary-types", params = "sort")
+    @GetMapping(value = DICTIONARY_TYPE_PATH, params = "sort")
     Flux<DictionaryTypeVO> queryList(@SpringQueryMap DictionaryTypeQuery params, @Nullable Pageable pageable, @SpringQueryMap String... projection);
 
     @GetMapping(value = "/dictionary-types/{id}")
@@ -40,7 +42,7 @@ public interface DictionaryTypeServiceClient extends DictionaryTypeService {
     }
 
     @Override
-    @PutMapping(value = "/dictionary-types")
+    @PutMapping(value = DICTIONARY_TYPE_PATH)
     Mono<Integer> modify(DictionaryTypeModify params);
 
     @DeleteMapping(value = "/dictionary-types/{id}")

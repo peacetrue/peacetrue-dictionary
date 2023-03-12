@@ -1,6 +1,7 @@
 package com.github.peacetrue.dictionary.modules.dictionarytype.imperative;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.peacetrue.dictionary.DictionaryConstants;
 import com.github.peacetrue.dictionary.imperative.DictionaryControllerTestAutoConfiguration;
 import com.github.peacetrue.dictionary.modules.dictionarytype.DictionaryTypeAdd;
 import com.github.peacetrue.dictionary.modules.dictionarytype.DictionaryTypeModify;
@@ -15,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_TYPE_PATH;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -36,7 +38,7 @@ class DictionaryTypeControllerTest {
     @SneakyThrows
     void add() {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.post("/dictionary-types")
+                        MockMvcRequestBuilders.post(DICTIONARY_TYPE_PATH)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(EASY_RANDOM.nextObject(DictionaryTypeAdd.class)))
                 )
@@ -47,7 +49,7 @@ class DictionaryTypeControllerTest {
     @Test
     @SneakyThrows
     void queryForPage() {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/dictionary-types"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(DICTIONARY_TYPE_PATH))
                 .andExpect(status().isOk())
 
         ;
@@ -56,9 +58,8 @@ class DictionaryTypeControllerTest {
     @Test
     @SneakyThrows
     void queryForList() {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/dictionary-types?rtn=list"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(DICTIONARY_TYPE_PATH).queryParam("rtn","list"))
                 .andExpect(status().isOk())
-
         ;
     }
 
@@ -75,7 +76,7 @@ class DictionaryTypeControllerTest {
     @SneakyThrows
     void modify() {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.put("/dictionary-types")
+                        MockMvcRequestBuilders.put(DICTIONARY_TYPE_PATH)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(EASY_RANDOM.nextObject(DictionaryTypeModify.class)))
                 )

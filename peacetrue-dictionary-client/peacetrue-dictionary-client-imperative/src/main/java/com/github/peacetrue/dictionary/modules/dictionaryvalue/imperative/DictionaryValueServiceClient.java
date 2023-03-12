@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_VALUE_PATH;
+
 /**
  * 字典项值客户端。
  *
@@ -19,18 +21,18 @@ import java.util.List;
 public interface DictionaryValueServiceClient extends DictionaryValueService {
 
     @Override
-    @PostMapping(value = "/dictionary-values")
+    @PostMapping(value = DICTIONARY_VALUE_PATH)
     DictionaryValueVO add(DictionaryValueAdd params);
 
     @Override
-    @GetMapping(value = "/dictionary-values", params = "page")
+    @GetMapping(value = DICTIONARY_VALUE_PATH, params = "page")
     Page<DictionaryValueVO> queryPage(@Nullable @SpringQueryMap DictionaryValueQuery params, @Nullable Pageable pageable, @SpringQueryMap String... projection);
 
     @Override
-    @GetMapping(value = "/dictionary-values", params = "sort")
+    @GetMapping(value = DICTIONARY_VALUE_PATH, params = "sort")
     List<DictionaryValueVO> queryList(@SpringQueryMap DictionaryValueQuery params, @Nullable Pageable pageable, @SpringQueryMap String... projection);
 
-    @GetMapping(value = "/dictionary-values/{id}")
+    @GetMapping(value = DICTIONARY_VALUE_PATH + "/{id}")
     DictionaryValueVO get(@PathVariable("id") Long id, @SpringQueryMap String... projection);
 
     @Override
@@ -39,10 +41,10 @@ public interface DictionaryValueServiceClient extends DictionaryValueService {
     }
 
     @Override
-    @PutMapping(value = "/dictionary-values")
+    @PutMapping(value = DICTIONARY_VALUE_PATH)
     Integer modify(DictionaryValueModify params);
 
-    @DeleteMapping(value = "/dictionary-values/{id}")
+    @DeleteMapping(value = DICTIONARY_VALUE_PATH + "/{id}")
     Integer delete(@PathVariable("id") Long id);
 
     @Override

@@ -13,6 +13,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_TYPE_PATH;
+
 /**
  * @author peace
  */
@@ -27,8 +29,8 @@ class DictionaryTypeControllerTest {
     @Test
     @Order(10)
     void add() {
-        this.client.post().uri("/dictionary-types")
-                .body(BodyInserters.fromObject(new DictionaryTypeAdd()))
+        this.client.post().uri(DICTIONARY_TYPE_PATH)
+                .body(BodyInserters.fromValue(new DictionaryTypeAdd()))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -39,7 +41,7 @@ class DictionaryTypeControllerTest {
     @Order(20)
     void queryForPage() {
         this.client.get()
-                .uri("/dictionary-types")
+                .uri(DICTIONARY_TYPE_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -50,7 +52,7 @@ class DictionaryTypeControllerTest {
     @Order(30)
     void queryForList() {
         this.client.get()
-                .uri("/dictionary-types?rtn=list")
+                .uri(DICTIONARY_TYPE_PATH + "?rtn=list")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -61,7 +63,7 @@ class DictionaryTypeControllerTest {
     @Order(40)
     void get() {
         this.client.get()
-                .uri("/dictionary-types/1")
+                .uri(DICTIONARY_TYPE_PATH + "/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -72,8 +74,8 @@ class DictionaryTypeControllerTest {
     @Order(50)
     void modify() {
         this.client.put()
-                .uri("/dictionary-types")
-                .body(BodyInserters.fromObject(new DictionaryTypeModify()))
+                .uri(DICTIONARY_TYPE_PATH)
+                .body(BodyInserters.fromValue(new DictionaryTypeModify()))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -84,7 +86,7 @@ class DictionaryTypeControllerTest {
     @Order(60)
     void delete() {
         this.client.delete()
-                .uri("/dictionary-types/1")
+                .uri(DICTIONARY_TYPE_PATH + "/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()

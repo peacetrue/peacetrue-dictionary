@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_TYPE_PATH;
+
 /**
  * 字典类型客户端。
  * <p>
@@ -22,15 +24,15 @@ import java.util.List;
 public interface DictionaryTypeServiceClient extends DictionaryTypeService {
 
     @Override
-    @PostMapping(value = "/dictionary-types")
+    @PostMapping(value = DICTIONARY_TYPE_PATH)
     DictionaryTypeVO add(DictionaryTypeAdd params);
 
     @Override
-    @GetMapping(value = "/dictionary-types")
+    @GetMapping(value = DICTIONARY_TYPE_PATH)
     Page<DictionaryTypeVO> queryPage(@Nullable @SpringQueryMap DictionaryTypeQuery params, Pageable pageable, @SpringQueryMap String... projection);
 
     @Override
-    @GetMapping(value = "/dictionary-types", params = "rtn=list")
+    @GetMapping(value = DICTIONARY_TYPE_PATH, params = "rtn=list")
     List<DictionaryTypeVO> queryList(@SpringQueryMap DictionaryTypeQuery params, Pageable pageable, @SpringQueryMap String... projection);
 
     @GetMapping(value = "/dictionary-types/{id}")
@@ -42,7 +44,7 @@ public interface DictionaryTypeServiceClient extends DictionaryTypeService {
     }
 
     @Override
-    @PutMapping(value = "/dictionary-types")
+    @PutMapping(value = DICTIONARY_TYPE_PATH)
     Integer modify(DictionaryTypeModify params);
 
     @DeleteMapping(value = "/dictionary-types/{id}")

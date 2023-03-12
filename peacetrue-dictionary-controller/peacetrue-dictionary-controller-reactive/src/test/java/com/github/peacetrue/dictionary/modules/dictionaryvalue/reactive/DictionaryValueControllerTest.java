@@ -13,6 +13,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_VALUE_PATH;
+
 /**
  * @author peace
  */
@@ -27,8 +29,8 @@ class DictionaryValueControllerTest {
     @Test
     @Order(10)
     void add() {
-        this.client.post().uri("/dictionary-values")
-                .body(BodyInserters.fromObject(new DictionaryValueAdd()))
+        this.client.post().uri(DICTIONARY_VALUE_PATH)
+                .body(BodyInserters.fromValue(new DictionaryValueAdd()))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -39,7 +41,7 @@ class DictionaryValueControllerTest {
     @Order(20)
     void queryForPage() {
         this.client.get()
-                .uri("/dictionary-values")
+                .uri(DICTIONARY_VALUE_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -50,7 +52,7 @@ class DictionaryValueControllerTest {
     @Order(30)
     void queryForList() {
         this.client.get()
-                .uri("/dictionary-values?rtn=list")
+                .uri(DICTIONARY_VALUE_PATH + "?rtn=list")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -61,7 +63,7 @@ class DictionaryValueControllerTest {
     @Order(40)
     void get() {
         this.client.get()
-                .uri("/dictionary-values/1")
+                .uri(DICTIONARY_VALUE_PATH + "/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -72,8 +74,8 @@ class DictionaryValueControllerTest {
     @Order(50)
     void modify() {
         this.client.put()
-                .uri("/dictionary-values")
-                .body(BodyInserters.fromObject(new DictionaryValueModify()))
+                .uri(DICTIONARY_VALUE_PATH)
+                .body(BodyInserters.fromValue(new DictionaryValueModify()))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -84,7 +86,7 @@ class DictionaryValueControllerTest {
     @Order(60)
     void delete() {
         this.client.delete()
-                .uri("/dictionary-values/1")
+                .uri(DICTIONARY_VALUE_PATH + "/1")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()

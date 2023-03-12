@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_VALUE_PATH;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,7 +46,7 @@ class DictionaryValueControllerTest {
         // avoid java.lang.AssertionError: Content type not set
         Mockito.when(dictionaryValueService.add(Mockito.any())).thenReturn(new DictionaryValueVO());
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.post("/dictionary-values")
+                        MockMvcRequestBuilders.post(DICTIONARY_VALUE_PATH)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(EASY_RANDOM.nextObject(DictionaryValueAdd.class)))
                 )
@@ -58,7 +59,7 @@ class DictionaryValueControllerTest {
     @SneakyThrows
     @Order(20)
     void queryForPage() {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/dictionary-values"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(DICTIONARY_VALUE_PATH))
                 .andExpect(status().isOk())
 //                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         ;
@@ -68,7 +69,7 @@ class DictionaryValueControllerTest {
     @SneakyThrows
     @Order(30)
     void queryForList() {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/dictionary-values?rtn=list"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(DICTIONARY_VALUE_PATH).queryParam("rtn", "list"))
                 .andExpect(status().isOk())
         ;
     }
@@ -77,7 +78,7 @@ class DictionaryValueControllerTest {
     @SneakyThrows
     @Order(40)
     void get() {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/dictionary-values/1"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get(DICTIONARY_VALUE_PATH + "/1"))
                 .andExpect(status().isOk())
         ;
     }
@@ -87,7 +88,7 @@ class DictionaryValueControllerTest {
     @Order(50)
     void modify() {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.put("/dictionary-values")
+                        MockMvcRequestBuilders.put(DICTIONARY_VALUE_PATH)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(EASY_RANDOM.nextObject(DictionaryValueModify.class)))
                 )

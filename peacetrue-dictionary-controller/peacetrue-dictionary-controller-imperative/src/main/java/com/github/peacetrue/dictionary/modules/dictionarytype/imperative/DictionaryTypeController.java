@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_TYPE_PATH;
+
 /**
  * 字典类型控制器。
  *
@@ -18,7 +20,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/dictionary-types", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = DICTIONARY_TYPE_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 @Setter(onMethod = @__(@Autowired))
 public class DictionaryTypeController {
 

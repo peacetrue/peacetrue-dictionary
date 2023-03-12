@@ -1,8 +1,6 @@
 package com.github.peacetrue.dictionary.modules.dictionaryvalue.reactive;
 
 import com.github.peacetrue.dictionary.modules.dictionaryvalue.*;
-import com.github.peacetrue.dictionary.modules.dictionaryvalue.reactive.DictionaryValueService;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_VALUE_PATH;
+
 /**
  * 字典项值控制器。
  *
@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 @RestController
-@RequestMapping(value = "/dictionary-values")
+@RequestMapping(value = DICTIONARY_VALUE_PATH)
 @Setter(onMethod = @__(@Autowired))
 public class DictionaryValueController {
 
