@@ -106,9 +106,3 @@ end note
 //
 // Spring MVC 和 Spring WebFlux。
 
-== 已知问题
-
-=== aggregateTestResults
-
-    Can't add different class with same name: com/github/peacetrue/dictionary/DictionaryServiceAutoConfiguration
-

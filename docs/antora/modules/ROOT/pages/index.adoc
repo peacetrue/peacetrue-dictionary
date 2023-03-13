@@ -1,6 +1,7 @@
 = 概述
 :github: https://github.com/peacetrue
 :website: https://peacetrue.github.io
+:app-group: com.github.peacetrue.dictionary
 :app-name: peacetrue-dictionary
 :app-version: 1.0.0-SNAPSHOT
 :app-ra-version: 0.0.0-1
@@ -11,6 +12,7 @@ image:https://img.shields.io/github/actions/workflow/status/peacetrue/{app-name}
 image:https://snyk.io/test/github/peacetrue/{app-name}/badge.svg["Snyk",link="https://app.snyk.io/org/peacetrue"]
 image:https://api-public.service.runforesight.com/api/v1/badge/success?repoId={foresight-repo-id}["Foresight",link="https://foresight.thundra.io/repositories/github/peacetrue/{app-name}/test-runs"]
 image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codecov",link="https://app.codecov.io/gh/peacetrue/{app-name}"]
+image:https://img.shields.io/nexus/r/{app-group}/{app-name}-api-imperative?label={app-name}&server=https%3A%2F%2Foss.sonatype.org%2F["{app-name}",link="https://search.maven.org/search?q={app-group}"]
 
 //@formatter:off
 
@@ -30,13 +32,21 @@ image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codec
 
 [source%nowrap,gradle,subs="attributes"]
 ----
-implementation "com.github.peacetrue.dictionary:{app-name}-service-api-reactive:{app-version}"
-implementation "com.github.peacetrue.dictionary:{app-name}-service-impl-reactive:{app-version}"
+// 命令式编程
+implementation "com.github.peacetrue.dictionary:{app-name}-api-imperative:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-impl-imperative:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-controller-imperative:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-client-imperative:{app-version}"
+
+// 响应式编程
+implementation "com.github.peacetrue.dictionary:{app-name}-api-reactive:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-impl-reactive:{app-version}"
 implementation "com.github.peacetrue.dictionary:{app-name}-controller-reactive:{app-version}"
+implementation "com.github.peacetrue.dictionary:{app-name}-client-reactive:{app-version}"
 ----
 
 // 最新版本可从 https://search.maven.org/search?q=com.github.peacetrue.dictionary[maven^] 中查看。
-可从 https://oss.sonatype.org/index.html#nexus-search;quick~com.github.peacetrue.dictionary[Sonatype^] 中查看最新版本。
+// 可从 https://oss.sonatype.org/index.html#nexus-search;quick~com.github.peacetrue.dictionary[Sonatype^] 中查看最新版本。
 
 在基于 React Admin 的项目中，安装如下依赖：
 
@@ -51,8 +61,7 @@ npm install @peace/dictionary-react-admin@{app-ra-version}
 
 == 活动（When）
 
-初始提交于 2022-10-20，
-最近提交于 {docdate}。
+初始提交于 2022-10-20，最近提交于 {docdate}。
 
 == 许可证（License）
 

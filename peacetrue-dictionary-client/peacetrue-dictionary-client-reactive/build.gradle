@@ -13,8 +13,8 @@ dependencies {
     testImplementation "javax.validation:validation-api"
     testImplementation "com.github.peacetrue:peacetrue-validation"
     testImplementation "org.springframework.boot:spring-boot-starter-webflux"
-    testImplementation 'com.playtika.reactivefeign:feign-reactor-core:3.2.6'
-    testImplementation 'com.playtika.reactivefeign:feign-reactor-webclient:3.2.6'
+    testImplementation 'com.playtika.reactivefeign:feign-reactor-core'
+    testImplementation 'com.playtika.reactivefeign:feign-reactor-webclient'
 
 
 }

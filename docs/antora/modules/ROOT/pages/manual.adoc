@@ -1,14 +1,26 @@
 = 用户手册
 
-{app-name} 共包括 5 个模块，4 个后端模块，1 个前端模块。
+{app-name} 共包括 9 个模块，8 个后端模块，1 个前端模块。
 
-peacetrue-dictionary-service-api-reactive::
+peacetrue-dictionary-reactadmin::
+集成前端 React Admin 模块。
+
+.命令式编程
+peacetrue-dictionary-api-imperative::
 数据字典服务接口。
-peacetrue-dictionary-service-impl-reactive::
+peacetrue-dictionary-impl-imperative::
+数据字典服务实现。
+peacetrue-dictionary-controller-imperative::
+数据字典控制器。
+peacetrue-dictionary-client-imperative::
+数据字典客户端。
+
+.响应式编程
+peacetrue-dictionary-api-reactive::
+数据字典服务接口。
+peacetrue-dictionary-impl-reactive::
 数据字典服务实现。
 peacetrue-dictionary-controller-reactive::
 数据字典控制器。
-peacetrue-dictionary-client::
+peacetrue-dictionary-client-reactive::
 数据字典客户端。
-peacetrue-dictionary-reactadmin::
-集成前端 React Admin 模块。

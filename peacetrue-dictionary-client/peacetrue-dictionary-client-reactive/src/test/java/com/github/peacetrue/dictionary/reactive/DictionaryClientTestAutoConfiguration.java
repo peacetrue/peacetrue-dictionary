@@ -30,7 +30,6 @@ import reactivefeign.spring.config.ReactiveFeignAutoConfiguration;
         HttpHandlerAutoConfiguration.class,
         ReactiveWebServerFactoryAutoConfiguration.class,
 })
-//@EnableFeignClients(basePackages = "com.github.peacetrue.dictionary")
 @EnableReactiveFeignClients(basePackages = "com.github.peacetrue.dictionary")
 public class DictionaryClientTestAutoConfiguration {
 

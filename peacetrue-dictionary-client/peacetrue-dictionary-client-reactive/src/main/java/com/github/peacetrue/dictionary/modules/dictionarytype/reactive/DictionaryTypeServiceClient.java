@@ -9,8 +9,6 @@ import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.Nullable;
-
 import static com.github.peacetrue.dictionary.DictionaryConstants.DICTIONARY_TYPE_PATH;
 
 /**
@@ -27,11 +25,11 @@ public interface DictionaryTypeServiceClient extends DictionaryTypeService {
 
     @Override
     @GetMapping(value = DICTIONARY_TYPE_PATH, params = "page")
-    Mono<Page<DictionaryTypeVO>> queryPage(@Nullable @SpringQueryMap DictionaryTypeQuery params, @Nullable Pageable pageable, @SpringQueryMap String... projection);
+    Mono<Page<DictionaryTypeVO>> queryPage(@SpringQueryMap DictionaryTypeQuery params, @SpringQueryMap Pageable pageable, @SpringQueryMap String... projection);
 
     @Override
     @GetMapping(value = DICTIONARY_TYPE_PATH, params = "sort")
-    Flux<DictionaryTypeVO> queryList(@SpringQueryMap DictionaryTypeQuery params, @Nullable Pageable pageable, @SpringQueryMap String... projection);
+    Flux<DictionaryTypeVO> queryList(@SpringQueryMap DictionaryTypeQuery params, @SpringQueryMap Pageable pageable, @SpringQueryMap String... projection);
 
     @GetMapping(value = "/dictionary-types/{id}")
     Mono<DictionaryTypeVO> get(@PathVariable("id") Long id, @SpringQueryMap String... projection);

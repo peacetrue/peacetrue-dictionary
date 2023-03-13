@@ -25,11 +25,11 @@ public interface DictionaryValueServiceClient extends DictionaryValueService {
 
     @Override
     @GetMapping(value = DICTIONARY_VALUE_PATH)
-    Mono<Page<DictionaryValueVO>> queryPage(@SpringQueryMap DictionaryValueQuery params, Pageable pageable, @SpringQueryMap String... projection);
+    Mono<Page<DictionaryValueVO>> queryPage(@SpringQueryMap DictionaryValueQuery params, @SpringQueryMap Pageable pageable, @SpringQueryMap String... projection);
 
     @Override
     @GetMapping(value = DICTIONARY_VALUE_PATH, params = "rtn=list")
-    Flux<DictionaryValueVO> queryList(@SpringQueryMap DictionaryValueQuery params, Pageable pageable, @SpringQueryMap String... projection);
+    Flux<DictionaryValueVO> queryList(@SpringQueryMap DictionaryValueQuery params, @SpringQueryMap Pageable pageable, @SpringQueryMap String... projection);
 
     @GetMapping(value = DICTIONARY_VALUE_PATH + "/{id}")
     Mono<DictionaryValueVO> get(@PathVariable("id") Long id, @SpringQueryMap String... projection);

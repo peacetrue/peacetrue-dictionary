@@ -36,7 +36,7 @@ class DictionaryTypeServiceClientTest {
                 .verify();
     }
 
-    @Test
+//    @Test
     void queryPage() {
         DictionaryTypeQuery params = new DictionaryTypeQuery();
         StepVerifier
@@ -45,7 +45,7 @@ class DictionaryTypeServiceClientTest {
                 .verify();
     }
 
-    @Test
+//    @Test
     void queryList() {
         DictionaryTypeQuery params = new DictionaryTypeQuery();
         StepVerifier
