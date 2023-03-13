@@ -7,11 +7,3 @@ dependencies {
     compileOnly "com.github.peacetrue:peacetrue-validation"
     compileOnly "org.springframework.data:spring-data-commons" //@org.springframework.data.annotation.Id
 }
-
-// 生成实体模型
-//    annotationProcessor "org.hibernate:hibernate-jpamodelgen"
-//    implementation "org.hibernate:hibernate-jpamodelgen"
-//tasks.withType(JavaCompile) {
-//    options.annotationProcessorGeneratedSourcesDirectory = file("src/main/java")
-//}
-

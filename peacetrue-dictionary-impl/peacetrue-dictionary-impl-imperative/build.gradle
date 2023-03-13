@@ -33,11 +33,3 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-starter-validation"
 
 }
-
-// 生成实体模型
-//    annotationProcessor "org.hibernate:hibernate-jpamodelgen"
-//    implementation "org.hibernate:hibernate-jpamodelgen"
-//tasks.withType(JavaCompile) {
-//    options.annotationProcessorGeneratedSourcesDirectory = file("src/main/java")
-//}
-
